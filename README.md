@@ -3,4 +3,4 @@ A 2D graphics package that draws using <a href="https://en.wikipedia.org/wiki/Wi
 
 
 
-![alt tag](https://raw.githubusercontent.com/mis94/Graphtona-2D-Package/master/Screenshot.png)
+![alt tag](https://raw.githubusercontent.com/mis94/Graphtona-2D-Package/master/Screenshot.jpg)
