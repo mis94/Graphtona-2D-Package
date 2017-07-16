@@ -1,6 +1,6 @@
 #include "stdafx.h" // if any more headers need to be included add them to this file
 using namespace std;
-
+// now the project became a repo
 const double PI = 3.14159265359;
 
 double absoluteDouble(double number)
