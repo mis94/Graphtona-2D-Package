@@ -28,9 +28,9 @@ void swapDouble(double &x, double &y)
 	y = temp;
 }
 
-void drawLineMethod1(HDC hdc ,double xs, double ys, double xe, double ye) // using simple parametric equation
+void drawLineMethod1(HDC hdc, double xs, double ys, double xe, double ye) // using simple parametric equation
 {
-	double dt = 1 / max(absoluteDouble(xs-xe), absoluteDouble(ys-ye)); // we can also cast (xs-xe) and (ys-ye) to integer and it will work
+	double dt = 1 / max(absoluteDouble(xs - xe), absoluteDouble(ys - ye)); // we can also cast (xs-xe) and (ys-ye) to integer and it will work
 	for (double t = 0;t <= 1;t += dt)
 	{
 		double x = xs + t*(xe - xs);
@@ -71,7 +71,7 @@ void drawLineDDA(HDC hdc, double xs, double ys, double xe, double ye)
 
 		int x = xs;
 		double y = ys;
-		SetPixel(hdc, x, y, RGB(max(x+y, 255), x, y));
+		SetPixel(hdc, x, y, RGB(max(x + y, 255), x, y));
 
 		while (x < xe)
 		{
@@ -147,7 +147,7 @@ void drawLineBresenham(HDC hdc, int xs, int ys, int xe, int ye)
 {
 	int deltaX = xe - xs;
 	int deltaY = ye - ys;
-	
+
 	if (abs(deltaY) <= abs(deltaX))
 	{
 		if (xs > xe)
@@ -311,13 +311,57 @@ void drawCircleBresenham(HDC hdc, double xc, double yc, int radius)
 	}
 }
 
+void fillCircle(HDC hdc, double xc, double yc, int radius)
+{
+	for (int i = radius;i >= 0;i--)
+		drawCircleBresenham(hdc, xc, yc, i);
+}
+
+void DrawEllipseBresenham(HDC hdc, int xc, int yc, int width, int height)
+{
+	int a2 = width * width;
+	int b2 = height * height;
+	int fa2 = 4 * a2, fb2 = 4 * b2;
+	int x, y, sigma;
+	COLORREF color = RGB(255, 0, 0);
+
+	for (x = 0, y = height, sigma = 2 * b2 + a2*(1 - 2 * height); b2*x <= a2*y; x++)
+	{
+
+		SetPixel(hdc, xc + x, yc + y, color);
+		SetPixel(hdc, xc - x, yc + y, color);
+		SetPixel(hdc, xc + x, yc - y, color);
+		SetPixel(hdc, xc - x, yc - y, color);
+		if (sigma >= 0)
+		{
+			sigma += fa2 * (1 - y);
+			y--;
+		}
+		sigma += b2 * ((4 * x) + 6);
+	}
+
+	for (x = width, y = 0, sigma = 2 * a2 + b2*(1 - 2 * width); a2*y <= b2*x; y++)
+	{
+		SetPixel(hdc, xc + x, yc + y, color);
+		SetPixel(hdc, xc - x, yc + y, color);
+		SetPixel(hdc, xc + x, yc - y, color);
+		SetPixel(hdc, xc - x, yc - y, color);
+		if (sigma >= 0)
+		{
+			sigma += fb2 * (1 - x);
+			x--;
+		}
+		sigma += a2 * ((4 * y) + 6);
+	}
+}
+
 void drawFirstDegreeCurve(HDC hdc, double xs, double ys, double xe, double ye)
 {
 	double beta1 = xs;
 	double beta2 = ys;
 	double alpha1 = xe - xs;
 	double alpha2 = ye - ys;
-	
+
 	double dt = 1 / max(absoluteDouble(alpha1), absoluteDouble(alpha2));
 
 	double x, y;
@@ -367,7 +411,7 @@ int mulitplyTwoVectors(int v1[], int v2[], int size)
 
 void drawHermiteCurve(HDC hdc, double xs, double ys, double s1x, double s1y, double xe, double ye, double s2x, double s2y)
 {
-	int hermiteMatrix[4][4] = { {2, 1, -2, 1}, {-3, -2, 3, -1}, {0, 1, 0, 0}, {1, 0, 0, 0} };
+	int hermiteMatrix[4][4] = { { 2, 1, -2, 1 },{ -3, -2, 3, -1 },{ 0, 1, 0, 0 },{ 1, 0, 0, 0 } };
 	int inputX[4] = { xs, s1x, xe, s2x };
 	int inputY[4] = { ys, s1y, ye, s2y };
 	// each row in the matrix with the vector of xs and ys
@@ -423,8 +467,8 @@ void drawSplines(HDC hdc, POINT points[], int numberOfPoints, double c) // c is 
 
 	for (int i = 2;i < numberOfPoints - 1;i++)
 	{
-		double s2x = (1 - c)*(points[i+1].x - points[i-1].x);
-		double s2y = (1 - c)*(points[i+1].y - points[i-1].y);
+		double s2x = (1 - c)*(points[i + 1].x - points[i - 1].x);
+		double s2y = (1 - c)*(points[i + 1].y - points[i - 1].y);
 		drawHermiteCurve(hdc, points[i - 1].x, points[i - 1].y, s1x, s1y, points[i].x, points[i].y, s2x, s2y);
 		s1x = s2x;
 		s1y = s2y;
@@ -435,10 +479,10 @@ void drawRhombus(HDC hdc, double xs, double ys, double xe, double ye)
 {
 	double distance_x = absoluteDouble(xe - xs);
 	double distance_y = absoluteDouble(ye - ys);
-	
-	drawLineDDA(hdc, xs, ys, xs + distance_x , ys - distance_y);
-	drawLineDDA(hdc , xs + distance_x, ys - distance_y , xs , ys - distance_y - distance_y);
-	drawLineDDA(hdc, xs - distance_x, ys - distance_y , xs, ys - distance_y - distance_y);
+
+	drawLineDDA(hdc, xs, ys, xs + distance_x, ys - distance_y);
+	drawLineDDA(hdc, xs + distance_x, ys - distance_y, xs, ys - distance_y - distance_y);
+	drawLineDDA(hdc, xs - distance_x, ys - distance_y, xs, ys - distance_y - distance_y);
 	drawLineDDA(hdc, xs, ys, xs - distance_x, ys - distance_y);
 }
 
@@ -456,7 +500,7 @@ void drawRectangle(HDC hdc, double xs, double ys, double xe, double ye)
 	drawLineMethod1(hdc, xs, ys, xe, ye);
 	drawLineMethod1(hdc, xe, ye, xe, ye + distance_y);
 	drawLineMethod1(hdc, xe, ye + distance_y, xs, ys + distance_y);
-	drawLineMethod1(hdc, xs, ys+distance_y, xs, ys);
+	drawLineMethod1(hdc, xs, ys + distance_y, xs, ys);
 }
 
 void drawTriangle(HDC hdc, double xs, double ys, double xe, double ye)
@@ -581,9 +625,9 @@ void convexFill(HDC hdc, POINT* points, int numberOfPoints)
 			x += mi;
 			y++;
 		}
-		horizontal:v1 = points[i];
+	horizontal:v1 = points[i];
 	}
-	
+
 	for (int i = 0;i < 800;i++)
 	{
 		if (table[i].xLeft < table[i].xRight)
@@ -634,7 +678,7 @@ union OutCode {
 	};
 };
 
-OutCode getOutCode(double x, double y, int xleft, int xright, int ytop, int ybottom) 
+OutCode getOutCode(double x, double y, int xleft, int xright, int ytop, int ybottom)
 {
 	OutCode out;
 	out.All = 0;
@@ -650,13 +694,13 @@ OutCode getOutCode(double x, double y, int xleft, int xright, int ytop, int ybot
 	return out;
 }
 
-void verticalIntersect(double xs, double ys, double xe, double ye, int x, double *xi, double *yi) 
+void verticalIntersect(double xs, double ys, double xe, double ye, int x, double *xi, double *yi)
 {
 	*xi = x;
 	*yi = ys + (x - xs) * (ye - ys) / (xe - xs);
 }
 
-void horizontalIntersect(double xs, double ys, double xe, double ye, int y, double *xi, double *yi) 
+void horizontalIntersect(double xs, double ys, double xe, double ye, int y, double *xi, double *yi)
 {
 	*yi = y;
 	*xi = xs + (y - ys) * (xe - xs) / (ye - ys);
@@ -679,7 +723,7 @@ void clipLine(HDC hdc, int xs, int ys, int xe, int ye, int xleft, int xright, in
 				verticalIntersect(x1, y1, x2, y2, xright, &xi, &yi);
 			else if (out1.top)
 				horizontalIntersect(x1, y1, x2, y2, ytop, &xi, &yi);
-			else 
+			else
 				horizontalIntersect(x1, y1, x2, y2, ybottom, &xi, &yi);
 			x1 = xi;
 			y1 = yi;
@@ -693,7 +737,7 @@ void clipLine(HDC hdc, int xs, int ys, int xe, int ye, int xleft, int xright, in
 				verticalIntersect(x1, y1, x2, y2, xright, &xi, &yi);
 			else if (out2.top)
 				horizontalIntersect(x1, y1, x2, y2, ytop, &xi, &yi);
-			else 
+			else
 				horizontalIntersect(x1, y1, x2, y2, ybottom, &xi, &yi);
 			x2 = xi;
 			y2 = yi;
@@ -734,13 +778,13 @@ void clipLineToCircle(HDC hdc, int xa, int ya, int xb, int yb, double ccX, doubl
 
 int algo1 = 1, algo2 = 2, algo3 = 3, algo4 = 4, algo5 = 5, algo6 = 6, algo7 = 7, algo8 = 8, algo9 = 9, algo10 = 10, ch = -1;
 int algo11 = 11, algo12 = 12, algo13 = 13, algo14 = 14, algo15 = 15, algo16 = 16, algo17 = 17, algo18 = 18, algo19 = 19;
-int algo20 = 20, algo21 = 21;
+int algo20 = 20, algo21 = 21, algo22 = 22, algo23 = 23;
 LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 {
 	HDC hdc; //handle of device context
 	static double x1, y1, s1x, s1y, x2, y2, s2x, s2y;
 	static bool isFirstPress = 1, isSecondPress = 1, isThirdPress = 1; // those could also be global
-	
+
 	switch (mcode) {
 	case WM_CREATE: {
 		HMENU hMenubar = CreateMenu();
@@ -765,6 +809,10 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 		AppendMenu(hFile3, MF_STRING, algo10, L"Iterative polar algorithm");
 		AppendMenu(hFile3, MF_STRING, algo11, L"Bresenham midpoint algorithm");
 
+		HMENU hFile7 = CreateMenu(); // ellipse
+		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile7, L"Ellipse");
+		AppendMenu(hFile7, MF_STRING, algo23, L"Ellipse Drawing");
+
 		HMENU hFile4 = CreateMenu(); // curve
 		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile4, L"Curve");
 		AppendMenu(hFile4, MF_STRING, algo12, L"First Degree");
@@ -776,6 +824,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 		HMENU hFile5 = CreateMenu(); // convex filling
 		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile5, L"Filling");
 		AppendMenu(hFile5, MF_STRING, algo17, L"Convex filling");
+		AppendMenu(hFile5, MF_STRING, algo22, L"Circle filling");
 
 		HMENU hFile6 = CreateMenu(); // convex filling
 		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile6, L"Clipping");
@@ -830,13 +879,17 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			ch = 20;
 		else if (LOWORD(wp) == algo21)
 			ch = 21;
+		else if (LOWORD(wp) == algo22)
+			ch = 22;
+		else if (LOWORD(wp) == algo23)
+			ch = 23;
 
 		isFirstPress = 1;
 		isSecondPress = 1;
 		isThirdPress = 1;
 	}break;
 	case WM_LBUTTONDOWN: {
-		if(isFirstPress)
+		if (isFirstPress)
 		{
 			hdc = GetDC(hWnd);
 
@@ -865,7 +918,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			ReleaseDC(hWnd, hdc);
 			isFirstPress = 1;continueTakingInput1:;
 		}
-		else if(isSecondPress)
+		else if (isSecondPress)
 		{
 			hdc = GetDC(hWnd);
 
@@ -888,6 +941,10 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				drawCircleBresenham(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 12)
 				drawFirstDegreeCurve(hdc, x1, y1, x2, y2);
+			else if (ch == 22)
+				fillCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			else if (ch == 23)
+				DrawEllipseBresenham(hdc, x1, y1, 2*sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 19)
 			{
 				drawLineMethod1(hdc, Wleft, Wtop, Wright, Wtop);
@@ -932,13 +989,13 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 		else
 		{
 			hdc = GetDC(hWnd);
-			
+
 			s2x = LOWORD(lp);
 			s2y = HIWORD(lp);
 
 			if (ch == 14)
 				drawHermiteCurve(hdc, x1, y1, s1x, s1y, x2, y2, s2x, s2y);
-			else if(ch==15)
+			else if (ch == 15)
 				drawBezierCurve(hdc, x1, y1, s1x, s1y, x2, y2, s2x, s2y);
 			else if (ch == 16)
 			{
@@ -1004,7 +1061,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winF
 	hWnd = CreateWindowEx(0, L"myClass", L"Graphtona", WS_OVERLAPPEDWINDOW, 0, 0, 800, 600, NULL, NULL, hInst, 0);
 	ShowWindow(hWnd, winFormat);
 	UpdateWindow(hWnd);
-	
+
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0) > 0)
 	{
