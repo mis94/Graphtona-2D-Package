@@ -27,8 +27,12 @@ This package enables users to:
 	- Clipping a point according to a rectangle & circle
 	- Clipping a straight line according to a rectangle & circle
 
+
+![alt tag](https://raw.githubusercontent.com/mis94/Graphtona-2D-Package/master/Screenshot.jpg)
+
+
 ### Contributing
 The project is still under development and contribution is welcomed including but not limited to adding new algorithms, enhancing existing algorithms, fixing bugs, adding or enhancing comments, improving naming conventions or code structure to make it cleaner, shorter or simpler. You can do so through issues or directly with a pull request.
 
-
-![alt tag](https://raw.githubusercontent.com/mis94/Graphtona-2D-Package/master/Screenshot.jpg)
+### License
+Graphtona is licensed under the <a href="https://github.com/mis94/Graphtona-2D-Package/blob/master/LICENSE.md"> MIT License </a>
