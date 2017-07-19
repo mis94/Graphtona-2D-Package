@@ -11,13 +11,6 @@
 // Windows Header Files:
 #include <windows.h>
 
-// C RunTime Header Files
-#include <stdlib.h>
-#include <malloc.h>
-#include <memory.h>
-#include <tchar.h>
-#include <iostream>
-#include <math.h>
-#include <algorithm>
-
 // TODO: reference additional headers your program requires here
+
+#include <algorithm>
