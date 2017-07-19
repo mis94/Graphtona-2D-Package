@@ -1,22 +1,12 @@
-#include "stdafx.h" // if any more headers need to be included add them to this file
-using namespace std;
+#include "DDALineDrawer.h"
+#include "ParametricLineDrawer.h"
+#include "BresenhamLineDrawer.h"
 
 const double PI = 3.14159265359;
 
-void drawLineMethod1(HDC hdc, double xs, double ys, double xe, double ye) // using simple parametric equation
-{
-	double dt = 1 / max(abs(xs - xe), abs(ys - ye));
-	for (double t = 0;t <= 1;t += dt)
-	{
-		double x = xs + t*(xe - xs);
-		double y = ys + t*(ye - ys);
-		SetPixel(hdc, round(x), round(y), RGB(0, 0, 0));
-	}
-}
-
 void drawLineMethod2(HDC hdc, double xs, double ys, double xe, double ye) // using optimized parametric equation
 {
-	int numberOfPoints = max((int)(xs - xe), (int)(ys - ye));
+	int numberOfPoints = max(abs(xs - xe), abs(ys - ye));
 	double dt = 1.0 / numberOfPoints;
 	double x = xs, y = ys;
 	double dx = dt*(xe - xs);
@@ -450,119 +440,6 @@ void drawSplines(HDC hdc, POINT points[], int numberOfPoints, double c) // c is 
 	}
 }
 
-void drawRhombus(HDC hdc, double xs, double ys, double xe, double ye)
-{
-	double distance_x = abs(xe - xs);
-	double distance_y = abs(ye - ys);
-
-	drawLineDDA(hdc, xs, ys, xs + distance_x, ys - distance_y);
-	drawLineDDA(hdc, xs + distance_x, ys - distance_y, xs, ys - distance_y - distance_y);
-	drawLineDDA(hdc, xs - distance_x, ys - distance_y, xs, ys - distance_y - distance_y);
-	drawLineDDA(hdc, xs, ys, xs - distance_x, ys - distance_y);
-}
-
-void drawRectangle(HDC hdc, double xs, double ys, double xe, double ye)
-{
-	double distance_x = abs(xe - xs);
-	double distance_y = abs(ye - ys);
-	if (xs < xe)
-	{
-		swap(xs, xe);
-		swap(ys, ye);
-	}
-	if (distance_y == 0)
-		distance_y = 150;
-	drawLineMethod1(hdc, xs, ys, xe, ye);
-	drawLineMethod1(hdc, xe, ye, xe, ye + distance_y);
-	drawLineMethod1(hdc, xe, ye + distance_y, xs, ys + distance_y);
-	drawLineMethod1(hdc, xs, ys + distance_y, xs, ys);
-}
-
-void drawTriangle(HDC hdc, double xs, double ys, double xe, double ye)
-{
-	double distance_x = abs(xe - xs);
-	double distance_y = abs(ye - ys);
-	if (xs < xe)
-	{
-		swap(xs, xe);
-		swap(ys, ye);
-	}
-	drawLineMethod1(hdc, xs, ys, xe, ye);
-	drawLineMethod1(hdc, xs, ys, xs + distance_x / 2, ys + distance_y / 2);
-	drawLineMethod1(hdc, xe, ye, xs + distance_x / 2, ys + distance_y / 2);
-}
-
-/*
-
-#include <list>
-using namespace std;
-#define MAXENTRIES 600
-struct EdgeRec
-{
-double x;
-double minv;
-int ymax;
-bool operator<(EdgeRec r)
-{
-return x<r.x;
-}
-};
-typedef list<EdgeRec> EdgeList;
-
-EdgeRec InitEdgeRec(POINT& v1,POINT& v2)
-{
-if(v1.y>v2.y)swap(v1,v2);
-EdgeRec rec;
-rec.x=v1.x;
-rec.ymax=v2.y;
-rec.minv=(double)(v2.x-v1.x)/(v2.y-v1.y);
-return rec;
-}
-
-void InitEdgeTable(POINT *polygon,int n,EdgeList table[])
-{
-POINT v1=polygon[n-1];
-for(int i=0;i<n;i++)
-{
-POINT v2=polygon[i];
-if(v1.y==v2.y){v1=v2;continue;}
-EdgeRec rec=InitEdgeRec(v1, v2);
-table[v1.y].push_back(rec);
-v1=polygon[i];
-}
-}
-
-void GeneralPolygonFill(HDC hdc,POINT *polygon,int n,COLORREF c)
-{
-EdgeList *table=new EdgeList [MAXENTRIES];
-InitEdgeTable(polygon,n,table);
-int y=0;
-while(y<MAXENTRIES && table[y].size()==0)y++;
-if(y==MAXENTRIES)return;
-EdgeList ActiveList=table[y];
-while (ActiveList.size()>0)
-{
-ActiveList.sort();
-for(EdgeList::iterator it=ActiveList.begin();it!=ActiveList.end();it++)
-{
-int x1=(int)ceil(it->x);
-it++;
-int x2=(int)floor(it->x);
-for(int x=x1;x<=x2;x++)SetPixel(hdc,x,y,c);
-}
-y++;
-EdgeList::iterator it=ActiveList.begin();
-while(it!=ActiveList.end())
-if(y==it->ymax) it=ActiveList.erase(it); else it++;
-for(EdgeList::iterator it=ActiveList.begin();it!=ActiveList.end();it++)
-it->x+=it->minv;
-ActiveList.insert(ActiveList.end(),table[y].begin(),table[y].end());
-}
-delete[] table;
-}
-
-*/
-
 struct EdgeRec {
 	int xLeft, xRight;
 	EdgeRec()
@@ -720,7 +597,7 @@ void clipLine(HDC hdc, int xs, int ys, int xe, int ye, int xleft, int xright, in
 		}
 	}
 	if (!out1.All && !out2.All)
-		drawLineMethod1(hdc, x1, y1, x2, y2);
+		drawLineMethod2(hdc, x1, y1, x2, y2);
 }
 
 void clipPointToCircle(HDC hdc, int xs, int ys, int xc, int yc, int radius)
@@ -873,10 +750,10 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 
 			if (ch == 18)
 			{
-				drawLineMethod1(hdc, Wleft, Wtop, Wright, Wtop);
-				drawLineMethod1(hdc, Wleft, Wbottom, Wright, Wbottom);
-				drawLineMethod1(hdc, Wleft, Wtop, Wleft, Wbottom);
-				drawLineMethod1(hdc, Wright, Wtop, Wright, Wbottom);
+				drawLineMethod2(hdc, Wleft, Wtop, Wright, Wtop);
+				drawLineMethod2(hdc, Wleft, Wbottom, Wright, Wbottom);
+				drawLineMethod2(hdc, Wleft, Wtop, Wleft, Wbottom);
+				drawLineMethod2(hdc, Wright, Wtop, Wright, Wbottom);
 				clipPoint(hdc, x1, y1, Wleft, Wright, Wtop, Wbottom);
 			}
 			else if (ch == 20)
@@ -901,11 +778,20 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			y2 = HIWORD(lp);
 
 			if (ch == 5)
-				drawLineDDA(hdc, x1, y1, x2, y2);
+			{
+				LineDrawer *lineDrawer = new DDALineDrawer();
+				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+			}
 			else if (ch == 6)
-				drawLineMethod1(hdc, x1, y1, x2, y2);
+			{
+				LineDrawer *lineDrawer = new ParametricLineDrawer();
+				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+			}
 			else if (ch == 7)
-				drawLineBresenham(hdc, x1, y1, x2, y2);
+			{
+				LineDrawer *lineDrawer = new BresenhamLineDrawer();
+				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+			}
 			else if (ch == 8)
 				drawCircleDirectCatesian(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 9)
@@ -922,10 +808,10 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				DrawEllipseBresenham(hdc, x1, y1, 2*sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 19)
 			{
-				drawLineMethod1(hdc, Wleft, Wtop, Wright, Wtop);
-				drawLineMethod1(hdc, Wleft, Wbottom, Wright, Wbottom);
-				drawLineMethod1(hdc, Wleft, Wtop, Wleft, Wbottom);
-				drawLineMethod1(hdc, Wright, Wtop, Wright, Wbottom);
+				drawLineMethod2(hdc, Wleft, Wtop, Wright, Wtop);
+				drawLineMethod2(hdc, Wleft, Wbottom, Wright, Wbottom);
+				drawLineMethod2(hdc, Wleft, Wtop, Wleft, Wbottom);
+				drawLineMethod2(hdc, Wright, Wtop, Wright, Wbottom);
 				clipLine(hdc, x1, y1, x2, y2, Wleft, Wright, Wtop, Wbottom);
 			}
 			else if (ch == 21)
