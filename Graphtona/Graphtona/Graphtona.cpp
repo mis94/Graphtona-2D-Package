@@ -1,36 +1,11 @@
 #include "stdafx.h" // if any more headers need to be included add them to this file
 using namespace std;
-// now the project became a repo
+
 const double PI = 3.14159265359;
-
-double absoluteDouble(double number)
-{
-	if (number < 0.0)
-		return number*-1;
-	else
-		return number;
-}
-
-void swapInteger(int &x, int &y)
-{
-	/*x = x^y;
-	y = x^y;
-	x = x^y;*/
-	int temp = x;
-	x = y;
-	y = temp;
-}
-
-void swapDouble(double &x, double &y)
-{
-	double temp = x;
-	x = y;
-	y = temp;
-}
 
 void drawLineMethod1(HDC hdc, double xs, double ys, double xe, double ye) // using simple parametric equation
 {
-	double dt = 1 / max(absoluteDouble(xs - xe), absoluteDouble(ys - ye)); // we can also cast (xs-xe) and (ys-ye) to integer and it will work
+	double dt = 1 / max(abs(xs - xe), abs(ys - ye));
 	for (double t = 0;t <= 1;t += dt)
 	{
 		double x = xs + t*(xe - xs);
@@ -59,14 +34,14 @@ void drawLineDDA(HDC hdc, double xs, double ys, double xe, double ye)
 	double dx = xe - xs;
 	double dy = ye - ys;
 
-	if (absoluteDouble(dy) < absoluteDouble(dx)) // slope < 1, x is the independent variable
+	if (abs(dy) < abs(dx)) // slope < 1, x is the independent variable
 	{
 		double slope = dy / dx;
 
 		if (xs > xe)
 		{
-			swapDouble(xs, xe);
-			swapDouble(ys, ye);
+			swap(xs, xe);
+			swap(ys, ye);
 		}
 
 		int x = xs;
@@ -86,8 +61,8 @@ void drawLineDDA(HDC hdc, double xs, double ys, double xe, double ye)
 
 		if (ys > ye)
 		{
-			swapDouble(xs, xe);
-			swapDouble(ys, ye);
+			swap(xs, xe);
+			swap(ys, ye);
 		}
 
 		double x = xs;
@@ -113,8 +88,8 @@ void drawDirectLine(HDC hdc, double xs, double ys, double xe, double ye)
 	{
 		if (xe < xs)
 		{
-			swapDouble(xs, xe);
-			swapDouble(ys, ye);
+			swap(xs, xe);
+			swap(ys, ye);
 		}
 		double x = xs;
 		double y = ys;
@@ -129,8 +104,8 @@ void drawDirectLine(HDC hdc, double xs, double ys, double xe, double ye)
 	{
 		if (ye < ys)
 		{
-			swapDouble(xs, xe);
-			swapDouble(ys, ye);
+			swap(xs, xe);
+			swap(ys, ye);
 		}
 		double x = xs;
 		double y = ys;
@@ -152,8 +127,8 @@ void drawLineBresenham(HDC hdc, int xs, int ys, int xe, int ye)
 	{
 		if (xs > xe)
 		{
-			swapInteger(xs, xe);
-			swapInteger(ys, ye);
+			swap(xs, xe);
+			swap(ys, ye);
 			deltaX = abs(deltaX);
 			deltaY = abs(deltaY);
 		}
@@ -189,8 +164,8 @@ void drawLineBresenham(HDC hdc, int xs, int ys, int xe, int ye)
 	{
 		if (ys > ye)
 		{
-			swapInteger(xs, xe);
-			swapInteger(ys, ye);
+			swap(xs, xe);
+			swap(ys, ye);
 			deltaX = abs(deltaX);
 			deltaY = abs(deltaY);
 		}
@@ -288,7 +263,7 @@ void drawCircleBresenham(HDC hdc, double xc, double yc, int radius)
 
 	draw8Points(hdc, xc, yc, x, y);
 
-	int d = 1 - radius; // 5/4 in the lecture
+	int d = 1 - radius;
 	int d1 = 3;
 	int d2 = 5 - (2 * radius);
 
@@ -362,12 +337,12 @@ void drawFirstDegreeCurve(HDC hdc, double xs, double ys, double xe, double ye)
 	double alpha1 = xe - xs;
 	double alpha2 = ye - ys;
 
-	double dt = 1 / max(absoluteDouble(alpha1), absoluteDouble(alpha2));
+	double dt = 1 / max(abs(alpha1), abs(alpha2));
 
 	double x, y;
 	double t = 0;
 	int i = 0;
-	while (i <= max(absoluteDouble(alpha1), absoluteDouble(alpha2)))
+	while (i <= max(abs(alpha1), abs(alpha2)))
 	{
 		x = alpha1*t + beta1;
 		y = alpha2*t + beta2;
@@ -386,12 +361,12 @@ void drawSecondDegreeCurve(HDC hdc, double xs, double ys, double xe, double ye, 
 	double gamma1 = s1x;
 	double gamma2 = s1y;
 
-	double dt = 1 / max(absoluteDouble(alpha1), absoluteDouble(alpha2));
+	double dt = 1 / max(abs(alpha1), abs(alpha2));
 
 	double x, y;
 	double t = 0;
 	int i = 0;
-	while (i <= max(absoluteDouble(alpha1), absoluteDouble(alpha2)))
+	while (i <= max(abs(alpha1), abs(alpha2)))
 	{
 		x = alpha1*t*t + beta1*t + gamma1;
 		y = alpha2*t*t + beta2*t + gamma2;
@@ -420,11 +395,11 @@ void drawHermiteCurve(HDC hdc, double xs, double ys, double s1x, double s1y, dou
 	double gamma1 = mulitplyTwoVectors(hermiteMatrix[2], inputX, 4), gamma2 = mulitplyTwoVectors(hermiteMatrix[2], inputY, 4);
 	double sigma1 = mulitplyTwoVectors(hermiteMatrix[3], inputX, 4), sigma2 = mulitplyTwoVectors(hermiteMatrix[3], inputY, 4);
 
-	double dt = 1 / max(absoluteDouble(ye - ys), absoluteDouble(xe - xs));
+	double dt = 1 / max(abs(ye - ys), abs(xe - xs));
 	double x, y;
 	double t = 0;
 	int i = 0;
-	while (i <= max(absoluteDouble(ye - ys), absoluteDouble(xe - xs)))
+	while (i <= max(abs(ye - ys), abs(xe - xs)))
 	{
 		x = alpha1*(t*t*t) + beta1*(t*t) + gamma1*(t)+sigma1;
 		y = alpha2*(t*t*t) + beta2*(t*t) + gamma2*(t)+sigma2;
@@ -446,11 +421,11 @@ void drawBezierCurve(HDC hdc, double xs, double ys, double s1x, double s1y, doub
 	double gamma1 = mulitplyTwoVectors(bezierMatrix[2], inputX, 4), gamma2 = mulitplyTwoVectors(bezierMatrix[2], inputY, 4);
 	double sigma1 = mulitplyTwoVectors(bezierMatrix[3], inputX, 4), sigma2 = mulitplyTwoVectors(bezierMatrix[3], inputY, 4);
 
-	double dt = 1 / max(absoluteDouble(ye - ys), absoluteDouble(xe - xs));
+	double dt = 1 / max(abs(ye - ys), abs(xe - xs));
 	double x, y;
 	double t = 0;
 	int i = 0;
-	while (i <= max(absoluteDouble(ye - ys), absoluteDouble(xe - xs)))
+	while (i <= max(abs(ye - ys), abs(xe - xs)))
 	{
 		x = alpha1*(t*t*t) + beta1*(t*t) + gamma1*(t)+sigma1;
 		y = alpha2*(t*t*t) + beta2*(t*t) + gamma2*(t)+sigma2;
@@ -477,8 +452,8 @@ void drawSplines(HDC hdc, POINT points[], int numberOfPoints, double c) // c is 
 
 void drawRhombus(HDC hdc, double xs, double ys, double xe, double ye)
 {
-	double distance_x = absoluteDouble(xe - xs);
-	double distance_y = absoluteDouble(ye - ys);
+	double distance_x = abs(xe - xs);
+	double distance_y = abs(ye - ys);
 
 	drawLineDDA(hdc, xs, ys, xs + distance_x, ys - distance_y);
 	drawLineDDA(hdc, xs + distance_x, ys - distance_y, xs, ys - distance_y - distance_y);
@@ -488,12 +463,12 @@ void drawRhombus(HDC hdc, double xs, double ys, double xe, double ye)
 
 void drawRectangle(HDC hdc, double xs, double ys, double xe, double ye)
 {
-	double distance_x = absoluteDouble(xe - xs);
-	double distance_y = absoluteDouble(ye - ys);
+	double distance_x = abs(xe - xs);
+	double distance_y = abs(ye - ys);
 	if (xs < xe)
 	{
-		swapDouble(xs, xe);
-		swapDouble(ys, ye);
+		swap(xs, xe);
+		swap(ys, ye);
 	}
 	if (distance_y == 0)
 		distance_y = 150;
@@ -505,12 +480,12 @@ void drawRectangle(HDC hdc, double xs, double ys, double xe, double ye)
 
 void drawTriangle(HDC hdc, double xs, double ys, double xe, double ye)
 {
-	double distance_x = absoluteDouble(xe - xs);
-	double distance_y = absoluteDouble(ye - ys);
+	double distance_x = abs(xe - xs);
+	double distance_y = abs(ye - ys);
 	if (xs < xe)
 	{
-		swapDouble(xs, xe);
-		swapDouble(ys, ye);
+		swap(xs, xe);
+		swap(ys, ye);
 	}
 	drawLineMethod1(hdc, xs, ys, xe, ye);
 	drawLineMethod1(hdc, xs, ys, xs + distance_x / 2, ys + distance_y / 2);
