@@ -9,7 +9,7 @@ void ParametricLineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
 	double dy = dt*(endPoint.y - startPoint.y);
 	for (double t = 1;t <= numberOfPoints;t++)
 	{
-		SetPixel(hdc, round(x), round(y), RGB(0, 0, 0));
+		SetPixel(hdc, round(x), round(y), RGB(26, 29, 94));
 		x += dx;
 		y += dy;
 	}
