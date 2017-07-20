@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Line">
+      <UniqueIdentifier>{dcb1ab26-b0ea-4fb8-b7e9-f0a5f55c21d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Circle">
+      <UniqueIdentifier>{5cef1254-0d3b-4eba-9c37-84cc331c9931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Line">
+      <UniqueIdentifier>{e34c50d8-2928-407f-b51d-c576706c8889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Circle">
+      <UniqueIdentifier>{8de5e800-70ac-40cf-93ac-1cd439d52f7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,34 +42,37 @@
     <ClInclude Include="Graphtona.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineDrawer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DDALineDrawer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Algorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParametricLineDrawer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BresenhamLineDrawer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Line</Filter>
     </ClInclude>
-    <ClInclude Include="CircleDrawer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="DDALineDrawer.h">
+      <Filter>Header Files\Line</Filter>
     </ClInclude>
-    <ClInclude Include="CartesianCircleDrawer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="LineDrawer.h">
+      <Filter>Header Files\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="ParametricLineDrawer.h">
+      <Filter>Header Files\Line</Filter>
     </ClInclude>
     <ClInclude Include="BasicPolarCircleDrawer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImprovedPolarCircleDrawer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Circle</Filter>
     </ClInclude>
     <ClInclude Include="BresenhamCircleDrawer.h">
+      <Filter>Header Files\Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="CartesianCircleDrawer.h">
+      <Filter>Header Files\Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleDrawer.h">
+      <Filter>Header Files\Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="ImprovedPolarCircleDrawer.h">
+      <Filter>Header Files\Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseDrawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,28 +83,31 @@
     <ClCompile Include="Graphtona.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DDALineDrawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParametricLineDrawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BresenhamLineDrawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CartesianCircleDrawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Algorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BasicPolarCircleDrawer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ParametricLineDrawer.cpp">
+      <Filter>Source Files\Line</Filter>
     </ClCompile>
-    <ClCompile Include="ImprovedPolarCircleDrawer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BresenhamLineDrawer.cpp">
+      <Filter>Source Files\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="DDALineDrawer.cpp">
+      <Filter>Source Files\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicPolarCircleDrawer.cpp">
+      <Filter>Source Files\Circle</Filter>
     </ClCompile>
     <ClCompile Include="BresenhamCircleDrawer.cpp">
+      <Filter>Source Files\Circle</Filter>
+    </ClCompile>
+    <ClCompile Include="CartesianCircleDrawer.cpp">
+      <Filter>Source Files\Circle</Filter>
+    </ClCompile>
+    <ClCompile Include="ImprovedPolarCircleDrawer.cpp">
+      <Filter>Source Files\Circle</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseDrawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

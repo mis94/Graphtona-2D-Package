@@ -152,6 +152,7 @@
     <ClInclude Include="CartesianCircleDrawer.h" />
     <ClInclude Include="CircleDrawer.h" />
     <ClInclude Include="DDALineDrawer.h" />
+    <ClInclude Include="EllipseDrawer.h" />
     <ClInclude Include="Graphtona.h" />
     <ClInclude Include="ImprovedPolarCircleDrawer.h" />
     <ClInclude Include="LineDrawer.h" />
@@ -177,6 +178,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DDALineDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="EllipseDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Graphtona.cpp">
