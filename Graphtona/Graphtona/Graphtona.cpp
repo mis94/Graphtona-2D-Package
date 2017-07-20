@@ -1,285 +1,16 @@
 #include "DDALineDrawer.h"
 #include "ParametricLineDrawer.h"
 #include "BresenhamLineDrawer.h"
-
-const double PI = 3.14159265359;
-
-void drawLineMethod2(HDC hdc, double xs, double ys, double xe, double ye) // using optimized parametric equation
-{
-	int numberOfPoints = max(abs(xs - xe), abs(ys - ye));
-	double dt = 1.0 / numberOfPoints;
-	double x = xs, y = ys;
-	double dx = dt*(xe - xs);
-	double dy = dt*(ye - ys);
-	for (double t = 1;t <= numberOfPoints;t++)
-	{
-		SetPixel(hdc, round(x), round(y), RGB(0, 0, 0));
-		x += dx;
-		y += dy;
-	}
-}
-
-void drawLineDDA(HDC hdc, double xs, double ys, double xe, double ye)
-{
-	double dx = xe - xs;
-	double dy = ye - ys;
-
-	if (abs(dy) < abs(dx)) // slope < 1, x is the independent variable
-	{
-		double slope = dy / dx;
-
-		if (xs > xe)
-		{
-			swap(xs, xe);
-			swap(ys, ye);
-		}
-
-		int x = xs;
-		double y = ys;
-		SetPixel(hdc, x, y, RGB(max(x + y, 255), x, y));
-
-		while (x < xe)
-		{
-			x++;
-			y += slope;
-			SetPixel(hdc, x, y, RGB(x, max(x + y, 255), y));
-		}
-	}
-	else // slope > 1, y is the independent variable
-	{
-		double slope = dx / dy;
-
-		if (ys > ye)
-		{
-			swap(xs, xe);
-			swap(ys, ye);
-		}
-
-		double x = xs;
-		int y = ys;
-		SetPixel(hdc, x, y, RGB(y, x, max(x + y, 255)));
-
-		while (y < ye)
-		{
-			y++;
-			x += slope;
-			SetPixel(hdc, x, y, RGB(y, max(x + y, 255), x));
-		}
-	}
-}
-
-void drawDirectLine(HDC hdc, double xs, double ys, double xe, double ye)
-{
-	double dy = ye - ys;
-	double dx = xe - xs;
-	double slope = dy / dx;
-
-	if (slope < 1)
-	{
-		if (xe < xs)
-		{
-			swap(xs, xe);
-			swap(ys, ye);
-		}
-		double x = xs;
-		double y = ys;
-		while (x < xe)
-		{
-			x++;
-			y = ys + slope * (x - xs);
-			SetPixel(hdc, round(x), round(y), RGB(0, 0, 0));
-		}
-	}
-	else
-	{
-		if (ye < ys)
-		{
-			swap(xs, xe);
-			swap(ys, ye);
-		}
-		double x = xs;
-		double y = ys;
-		while (y < ye)
-		{
-			y++;
-			x = xs + (y - ys) / slope;
-			SetPixel(hdc, round(x), round(y), RGB(0, 0, 0));
-		}
-	}
-}
-
-void drawLineBresenham(HDC hdc, int xs, int ys, int xe, int ye)
-{
-	int deltaX = xe - xs;
-	int deltaY = ye - ys;
-
-	if (abs(deltaY) <= abs(deltaX))
-	{
-		if (xs > xe)
-		{
-			swap(xs, xe);
-			swap(ys, ye);
-			deltaX = abs(deltaX);
-			deltaY = abs(deltaY);
-		}
-
-		int error = 2 * deltaY - deltaX;
-		int d1 = 2 * deltaY;
-		int d2 = 2 * (deltaY - deltaX);
-
-		int x = xs;
-		int y = ys;
-
-		int increment;
-		if (ys < ye)
-			increment = 1;
-		else
-			increment = -1;
-
-		SetPixel(hdc, x, y, RGB(0, 0, 0));
-		while (x < xe)
-		{
-			if (error < 0)
-				error += d1;
-			else
-			{
-				error += d2;
-				y += increment;
-			}
-			x++;
-			SetPixel(hdc, x, y, RGB(0, 0, 0));
-		}
-	}
-	else
-	{
-		if (ys > ye)
-		{
-			swap(xs, xe);
-			swap(ys, ye);
-			deltaX = abs(deltaX);
-			deltaY = abs(deltaY);
-		}
-
-		int error = 2 * deltaX - deltaY;
-		int d1 = 2 * deltaX;
-		int d2 = 2 * (deltaX - deltaY);
-
-		int x = xs;
-		int y = ys;
-
-		int increment;
-		if (xs < xe)
-			increment = 1;
-		else
-			increment = -1;
-
-		SetPixel(hdc, x, y, RGB(0, 0, 0));
-		while (y < ye)
-		{
-			if (error < 0)
-				error += d1;
-			else
-			{
-				error += d2;
-				x += increment;
-			}
-			y++;
-			SetPixel(hdc, x, y, RGB(0, 0, 0));
-		}
-	}
-}
-
-void draw8Points(HDC hdc, double xc, double yc, int a, int b)
-{
-	SetPixel(hdc, xc + a, yc + b, RGB(0, 0, 0));
-	SetPixel(hdc, xc - a, yc + b, RGB(0, 0, 0));
-	SetPixel(hdc, xc + a, yc - b, RGB(0, 0, 0));
-	SetPixel(hdc, xc - a, yc - b, RGB(0, 0, 0));
-	SetPixel(hdc, xc + b, yc + a, RGB(0, 0, 0));
-	SetPixel(hdc, xc - b, yc + a, RGB(0, 0, 0));
-	SetPixel(hdc, xc + b, yc - a, RGB(0, 0, 0));
-	SetPixel(hdc, xc - b, yc - a, RGB(0, 0, 0));
-}
-
-void drawCircleImprovedPolar(HDC hdc, double xc, double yc, int radius)
-{
-	double dtheta = 1.0 / radius;
-	double ct = cos(dtheta);
-	double st = sin(dtheta);
-
-	double x = radius;
-	double y = 0;
-
-	draw8Points(hdc, xc, yc, round(x), round(y));
-
-	while (y < x)
-	{
-		double x1 = x*ct - y*st;
-		y = x*st + y*ct;
-		x = x1;
-		draw8Points(hdc, xc, yc, round(x), round(y));
-	}
-}
-
-void drawCircleDirectCatesian(HDC hdc, double xc, double yc, int radius)
-{
-	double x = 0;
-	double y = radius;
-
-	while (x < y)
-	{
-		draw8Points(hdc, xc, yc, round(x), round(y));
-		x = x + 1;
-		y = sqrt(radius*radius - x*x);
-	}
-}
-
-void drawCircleBasicPolar(HDC hdc, double xc, double yc, int radius)
-{
-	double dtheta = 1.0 / radius;
-	double x, y;
-	for (double theta = 0;theta < PI / 4;theta += dtheta)
-	{
-		x = radius*cos(theta);
-		y = radius*sin(theta);
-		draw8Points(hdc, xc, yc, round(x), round(y));
-	}
-}
-
-void drawCircleBresenham(HDC hdc, double xc, double yc, int radius)
-{
-	int x = 0;
-	int y = radius;
-
-	draw8Points(hdc, xc, yc, x, y);
-
-	int d = 1 - radius;
-	int d1 = 3;
-	int d2 = 5 - (2 * radius);
-
-	while (x < y)
-	{
-		if (d < 0)
-		{
-			d += d1;
-			d2 += 2;
-		}
-		else
-		{
-			d += d2;
-			d2 += 4;
-			y--;
-		}
-		x++;
-		d1 += 2;
-		draw8Points(hdc, xc, yc, x, y);
-	}
-}
+#include "CartesianCircleDrawer.h"
+#include "BasicPolarCircleDrawer.h"
+#include "ImprovedPolarCircleDrawer.h"
+#include "BresenhamCircleDrawer.h"
 
 void fillCircle(HDC hdc, double xc, double yc, int radius)
 {
+	CircleDrawer *circleDrawer = new BresenhamCircleDrawer;
 	for (int i = radius;i >= 0;i--)
-		drawCircleBresenham(hdc, xc, yc, i);
+		circleDrawer->drawCircle(hdc, xc, yc, i);
 }
 
 void DrawEllipseBresenham(HDC hdc, int xc, int yc, int width, int height)
@@ -480,10 +211,11 @@ void convexFill(HDC hdc, POINT* points, int numberOfPoints)
 	horizontal:v1 = points[i];
 	}
 
+	LineDrawer *lineDrawer = new ParametricLineDrawer();
 	for (int i = 0;i < 800;i++)
 	{
 		if (table[i].xLeft < table[i].xRight)
-			drawLineDDA(hdc, table[i].xLeft, i, table[i].xRight, i);
+			lineDrawer->drawLine(hdc, table[i].xLeft, i, table[i].xRight, i);
 	}
 }
 
@@ -596,8 +328,9 @@ void clipLine(HDC hdc, int xs, int ys, int xe, int ye, int xleft, int xright, in
 			out2 = getOutCode(x2, y2, xleft, xright, ytop, ybottom);
 		}
 	}
+	LineDrawer *lineDrawer = new ParametricLineDrawer();
 	if (!out1.All && !out2.All)
-		drawLineMethod2(hdc, x1, y1, x2, y2);
+		lineDrawer->drawLine(hdc, x1, y1, x2, y2);
 }
 
 void clipPointToCircle(HDC hdc, int xs, int ys, int xc, int yc, int radius)
@@ -750,15 +483,17 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 
 			if (ch == 18)
 			{
-				drawLineMethod2(hdc, Wleft, Wtop, Wright, Wtop);
-				drawLineMethod2(hdc, Wleft, Wbottom, Wright, Wbottom);
-				drawLineMethod2(hdc, Wleft, Wtop, Wleft, Wbottom);
-				drawLineMethod2(hdc, Wright, Wtop, Wright, Wbottom);
+				LineDrawer *lineDrawer = new ParametricLineDrawer();
+				lineDrawer->drawLine(hdc, Wleft, Wtop, Wright, Wtop);
+				lineDrawer->drawLine(hdc, Wleft, Wbottom, Wright, Wbottom);
+				lineDrawer->drawLine(hdc, Wleft, Wtop, Wleft, Wbottom);
+				lineDrawer->drawLine(hdc, Wright, Wtop, Wright, Wbottom);
 				clipPoint(hdc, x1, y1, Wleft, Wright, Wtop, Wbottom);
 			}
 			else if (ch == 20)
 			{
-				drawCircleDirectCatesian(hdc, 450, 250, 150);
+				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
+				circleDrawer->drawCircle(hdc, 450, 250, 150);
 				clipPointToCircle(hdc, x1, y1, 450, 250, 150);
 			}
 			else
@@ -793,13 +528,25 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
 			}
 			else if (ch == 8)
-				drawCircleDirectCatesian(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			{
+				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
+				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			}
 			else if (ch == 9)
-				drawCircleBasicPolar(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			{
+				CircleDrawer *circleDrawer = new BasicPolarCircleDrawer();
+				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			}
 			else if (ch == 10)
-				drawCircleImprovedPolar(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			{
+				CircleDrawer *circleDrawer = new ImprovedPolarCircleDrawer();
+				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			}
 			else if (ch == 11)
-				drawCircleBresenham(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			{
+				CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
+				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+			}
 			else if (ch == 12)
 				drawFirstDegreeCurve(hdc, x1, y1, x2, y2);
 			else if (ch == 22)
@@ -808,15 +555,17 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				DrawEllipseBresenham(hdc, x1, y1, 2*sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 19)
 			{
-				drawLineMethod2(hdc, Wleft, Wtop, Wright, Wtop);
-				drawLineMethod2(hdc, Wleft, Wbottom, Wright, Wbottom);
-				drawLineMethod2(hdc, Wleft, Wtop, Wleft, Wbottom);
-				drawLineMethod2(hdc, Wright, Wtop, Wright, Wbottom);
+				LineDrawer *lineDrawer = new ParametricLineDrawer();
+				lineDrawer->drawLine(hdc, Wleft, Wtop, Wright, Wtop);
+				lineDrawer->drawLine(hdc, Wleft, Wbottom, Wright, Wbottom);
+				lineDrawer->drawLine(hdc, Wleft, Wtop, Wleft, Wbottom);
+				lineDrawer->drawLine(hdc, Wright, Wtop, Wright, Wbottom);
 				clipLine(hdc, x1, y1, x2, y2, Wleft, Wright, Wtop, Wbottom);
 			}
 			else if (ch == 21)
 			{
-				drawCircleDirectCatesian(hdc, 450, 250, 150);
+				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
+				circleDrawer->drawCircle(hdc, 450, 250, 150);
 				clipLineToCircle(hdc, x1, y1, x2, y2, 450, 250, 150);
 			}
 			else
