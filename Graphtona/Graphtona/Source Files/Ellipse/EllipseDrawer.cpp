@@ -1,4 +1,4 @@
-#include "EllipseDrawer.h"
+#include "..\..\Header Files\Ellipse\EllipseDrawer.h"
 
 void EllipseDrawer::drawEllipse(HDC hdc, int xc, int yc, int width, int height)
 {

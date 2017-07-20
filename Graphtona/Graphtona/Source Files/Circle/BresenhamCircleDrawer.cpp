@@ -1,4 +1,4 @@
-#include "BresenhamCircleDrawer.h"
+#include "..\..\Header Files\Circle\BresenhamCircleDrawer.h"
 
 void BresenhamCircleDrawer::drawCircle(HDC hdc, double xc, double yc, int radius)
 {

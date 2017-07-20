@@ -1,5 +1,5 @@
 #pragma once
-#include "Algorithm.h"
+#include "..\Algorithm.h"
 
 class EllipseDrawer : public Algorithm
 {

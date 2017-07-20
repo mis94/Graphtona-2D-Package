@@ -1,4 +1,4 @@
-#include "BresenhamLineDrawer.h"
+#include "..\..\Header Files\Line\BresenhamLineDrawer.h"
 
 void BresenhamLineDrawer::drawLine(HDC hdc, double xs, double ys, double xe, double ye)
 {

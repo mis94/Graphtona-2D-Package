@@ -1,4 +1,4 @@
-#include "ParametricLineDrawer.h"
+#include "..\..\Header Files\Line\ParametricLineDrawer.h"
 
 void ParametricLineDrawer::drawLine(HDC hdc, double xs, double ys, double xe, double ye)
 {

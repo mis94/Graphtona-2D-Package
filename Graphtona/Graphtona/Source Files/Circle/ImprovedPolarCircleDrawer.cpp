@@ -1,4 +1,4 @@
-#include "ImprovedPolarCircleDrawer.h"
+#include "..\..\Header Files\Circle\ImprovedPolarCircleDrawer.h"
 
 void ImprovedPolarCircleDrawer::drawCircle(HDC hdc, double xc, double yc, int radius)
 {

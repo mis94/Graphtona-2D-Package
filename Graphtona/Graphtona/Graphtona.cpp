@@ -1,11 +1,11 @@
-#include "DDALineDrawer.h"
-#include "ParametricLineDrawer.h"
-#include "BresenhamLineDrawer.h"
-#include "CartesianCircleDrawer.h"
-#include "BasicPolarCircleDrawer.h"
-#include "ImprovedPolarCircleDrawer.h"
-#include "BresenhamCircleDrawer.h"
-#include "EllipseDrawer.h"
+#include "Header Files\Line\DDALineDrawer.h"
+#include "Header Files\Line\ParametricLineDrawer.h"
+#include "Header Files\Line\BresenhamLineDrawer.h"
+#include "Header Files\Circle\CartesianCircleDrawer.h"
+#include "Header Files\Circle\BasicPolarCircleDrawer.h"
+#include "Header Files\Circle\ImprovedPolarCircleDrawer.h"
+#include "Header Files\Circle\BresenhamCircleDrawer.h"
+#include "Header Files\Ellipse\EllipseDrawer.h"
 
 void drawFirstDegreeCurve(HDC hdc, double xs, double ys, double xe, double ye)
 {
@@ -177,7 +177,7 @@ void convexFill(HDC hdc, POINT* points, int numberOfPoints)
 
 void fillCircle(HDC hdc, double xc, double yc, int radius)
 {
-	CircleDrawer *circleDrawer = new BresenhamCircleDrawer;
+	CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
 	for (int i = radius;i >= 0;i--)
 		circleDrawer->drawCircle(hdc, xc, yc, i);
 }

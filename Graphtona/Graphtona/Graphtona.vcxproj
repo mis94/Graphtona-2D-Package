@@ -145,51 +145,51 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Algorithm.h" />
-    <ClInclude Include="BasicPolarCircleDrawer.h" />
-    <ClInclude Include="BresenhamCircleDrawer.h" />
-    <ClInclude Include="BresenhamLineDrawer.h" />
-    <ClInclude Include="CartesianCircleDrawer.h" />
-    <ClInclude Include="CircleDrawer.h" />
-    <ClInclude Include="DDALineDrawer.h" />
-    <ClInclude Include="EllipseDrawer.h" />
+    <ClInclude Include="Header Files\Algorithm.h" />
+    <ClInclude Include="Header Files\Circle\BasicPolarCircleDrawer.h" />
+    <ClInclude Include="Header Files\Circle\BresenhamCircleDrawer.h" />
+    <ClInclude Include="Header Files\Circle\ImprovedPolarCircleDrawer.h" />
+    <ClInclude Include="Header Files\Line\BresenhamLineDrawer.h" />
+    <ClInclude Include="Header Files\Circle\CartesianCircleDrawer.h" />
+    <ClInclude Include="Header Files\Circle\CircleDrawer.h" />
+    <ClInclude Include="Header Files\Line\DDALineDrawer.h" />
+    <ClInclude Include="Header Files\Ellipse\EllipseDrawer.h" />
     <ClInclude Include="Graphtona.h" />
-    <ClInclude Include="ImprovedPolarCircleDrawer.h" />
-    <ClInclude Include="LineDrawer.h" />
-    <ClInclude Include="ParametricLineDrawer.h" />
+    <ClInclude Include="Header Files\Line\LineDrawer.h" />
+    <ClInclude Include="Header Files\Line\ParametricLineDrawer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Algorithm.cpp">
+    <ClCompile Include="Source Files\Algorithm.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="BasicPolarCircleDrawer.cpp">
+    <ClCompile Include="Source Files\Circle\BasicPolarCircleDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="BresenhamCircleDrawer.cpp">
+    <ClCompile Include="Source Files\Circle\BresenhamCircleDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="BresenhamLineDrawer.cpp">
+    <ClCompile Include="Source Files\Line\BresenhamLineDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="CartesianCircleDrawer.cpp">
+    <ClCompile Include="Source Files\Circle\CartesianCircleDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="DDALineDrawer.cpp">
+    <ClCompile Include="Source Files\Line\DDALineDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="EllipseDrawer.cpp">
+    <ClCompile Include="Source Files\Ellipse\EllipseDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Graphtona.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ImprovedPolarCircleDrawer.cpp">
+    <ClCompile Include="Source Files\Circle\ImprovedPolarCircleDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ParametricLineDrawer.cpp">
+    <ClCompile Include="Source Files\Line\ParametricLineDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
