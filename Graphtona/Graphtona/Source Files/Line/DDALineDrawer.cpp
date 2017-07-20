@@ -1,25 +1,25 @@
 #include "..\..\Header Files\Line\DDALineDrawer.h"
 
-void DDALineDrawer::drawLine(HDC hdc, double xs, double ys, double xe, double ye)
+void DDALineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
 {
-	double dx = xe - xs;
-	double dy = ye - ys;
+	double dx = endPoint.x - startPoint.x;
+	double dy = endPoint.y - startPoint.y;
 
 	if (abs(dy) < abs(dx)) // slope < 1, x is the independent variable
 	{
 		double slope = dy / dx;
 
-		if (xs > xe)
+		if (startPoint.x > endPoint.x)
 		{
-			swap(xs, xe);
-			swap(ys, ye);
+			swap(startPoint.x, endPoint.x);
+			swap(startPoint.y, endPoint.y);
 		}
 
-		int x = xs;
-		double y = ys;
+		int x = startPoint.x;
+		double y = startPoint.y;
 		SetPixel(hdc, x, y, RGB(max(x + y, 255), x, y));
 
-		while (x < xe)
+		while (x < endPoint.x)
 		{
 			x++;
 			y += slope;
@@ -30,17 +30,17 @@ void DDALineDrawer::drawLine(HDC hdc, double xs, double ys, double xe, double ye
 	{
 		double slope = dx / dy;
 
-		if (ys > ye)
+		if (startPoint.y > endPoint.y)
 		{
-			swap(xs, xe);
-			swap(ys, ye);
+			swap(startPoint.x, endPoint.x);
+			swap(startPoint.y, endPoint.y);
 		}
 
-		double x = xs;
-		int y = ys;
+		double x = startPoint.x;
+		int y = startPoint.y;
 		SetPixel(hdc, x, y, RGB(y, x, max(x + y, 255)));
 
-		while (y < ye)
+		while (y < endPoint.y)
 		{
 			y++;
 			x += slope;

@@ -55,15 +55,15 @@ void convexFill(HDC hdc, POINT* points, int numberOfPoints)
 	for (int i = 0;i < 800;i++)
 	{
 		if (table[i].xLeft < table[i].xRight)
-			lineDrawer->drawLine(hdc, table[i].xLeft, i, table[i].xRight, i);
+			lineDrawer->drawLine(hdc, Point(table[i].xLeft, i), Point(table[i].xRight, i));
 	}
 }
 
-void fillCircle(HDC hdc, double xc, double yc, int radius)
+void fillCircle(HDC hdc, Point center, int radius)
 {
 	CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
 	for (int i = radius;i >= 0;i--)
-		circleDrawer->drawCircle(hdc, xc, yc, i);
+		circleDrawer->drawCircle(hdc, center, i);
 }
 
 enum Color {
@@ -177,7 +177,7 @@ void clipLine(HDC hdc, int xs, int ys, int xe, int ye, int xleft, int xright, in
 	}
 	LineDrawer *lineDrawer = new ParametricLineDrawer();
 	if (!out1.All && !out2.All)
-		lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+		lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 }
 
 void clipPointToCircle(HDC hdc, int xs, int ys, int xc, int yc, int radius)
@@ -331,16 +331,16 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			if (ch == 18)
 			{
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
-				lineDrawer->drawLine(hdc, Wleft, Wtop, Wright, Wtop);
-				lineDrawer->drawLine(hdc, Wleft, Wbottom, Wright, Wbottom);
-				lineDrawer->drawLine(hdc, Wleft, Wtop, Wleft, Wbottom);
-				lineDrawer->drawLine(hdc, Wright, Wtop, Wright, Wbottom);
+				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wright, Wtop));
+				lineDrawer->drawLine(hdc, Point(Wleft, Wbottom), Point(Wright, Wbottom));
+				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wleft, Wbottom));
+				lineDrawer->drawLine(hdc, Point(Wright, Wtop), Point(Wright, Wbottom));
 				clipPoint(hdc, x1, y1, Wleft, Wright, Wtop, Wbottom);
 			}
 			else if (ch == 20)
 			{
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
-				circleDrawer->drawCircle(hdc, 450, 250, 150);
+				circleDrawer->drawCircle(hdc, Point(450, 250), 150);
 				clipPointToCircle(hdc, x1, y1, 450, 250, 150);
 			}
 			else
@@ -362,37 +362,37 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			if (ch == 5)
 			{
 				LineDrawer *lineDrawer = new DDALineDrawer();
-				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
 			else if (ch == 6)
 			{
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
-				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
 			else if (ch == 7)
 			{
 				LineDrawer *lineDrawer = new BresenhamLineDrawer();
-				lineDrawer->drawLine(hdc, x1, y1, x2, y2);
+				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
 			else if (ch == 8)
 			{
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
-				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
 			else if (ch == 9)
 			{
 				CircleDrawer *circleDrawer = new BasicPolarCircleDrawer();
-				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
 			else if (ch == 10)
 			{
 				CircleDrawer *circleDrawer = new ImprovedPolarCircleDrawer();
-				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
 			else if (ch == 11)
 			{
 				CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
-				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
 			else if (ch == 12)
 			{
@@ -405,25 +405,25 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				curveDrawer->drawCurve(hdc, startPoint, endPoint, {});
 			}
 			else if (ch == 22)
-				fillCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				fillCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 23)
 			{
 				EllipseDrawer ellipseDrawer;
-				ellipseDrawer.drawEllipse(hdc, x1, y1, 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				ellipseDrawer.drawEllipse(hdc, Point(x1, y1), 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
 			else if (ch == 19)
 			{
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
-				lineDrawer->drawLine(hdc, Wleft, Wtop, Wright, Wtop);
-				lineDrawer->drawLine(hdc, Wleft, Wbottom, Wright, Wbottom);
-				lineDrawer->drawLine(hdc, Wleft, Wtop, Wleft, Wbottom);
-				lineDrawer->drawLine(hdc, Wright, Wtop, Wright, Wbottom);
+				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wright, Wtop));
+				lineDrawer->drawLine(hdc, Point(Wleft, Wbottom), Point(Wright, Wbottom));
+				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wleft, Wbottom));
+				lineDrawer->drawLine(hdc, Point(Wright, Wtop), Point(Wright, Wbottom));
 				clipLine(hdc, x1, y1, x2, y2, Wleft, Wright, Wtop, Wbottom);
 			}
 			else if (ch == 21)
 			{
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
-				circleDrawer->drawCircle(hdc, 450, 250, 150);
+				circleDrawer->drawCircle(hdc, Point(450, 250), 150);
 				clipLineToCircle(hdc, x1, y1, x2, y2, 450, 250, 150);
 			}
 			else

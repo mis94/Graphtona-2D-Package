@@ -4,6 +4,6 @@
 class CircleDrawer : public Algorithm
 {
 public:
-	virtual void drawCircle(HDC hdc, double xc, double yc, int radius) = 0;
-	void draw8Points(HDC hdc, double xc, double yc, int a, int b);
+	virtual void drawCircle(HDC hdc, Point center, int radius) = 0;
+	void draw8Points(HDC hdc, Point center, int a, int b);
 };

@@ -1,11 +1,11 @@
 #include "..\..\Header Files\Circle\BresenhamCircleDrawer.h"
 
-void BresenhamCircleDrawer::drawCircle(HDC hdc, double xc, double yc, int radius)
+void BresenhamCircleDrawer::drawCircle(HDC hdc, Point center, int radius)
 {
 	int x = 0;
 	int y = radius;
 
-	draw8Points(hdc, xc, yc, x, y);
+	draw8Points(hdc, center, x, y);
 
 	int d = 1 - radius;
 	int d1 = 3;
@@ -26,6 +26,6 @@ void BresenhamCircleDrawer::drawCircle(HDC hdc, double xc, double yc, int radius
 		}
 		x++;
 		d1 += 2;
-		draw8Points(hdc, xc, yc, x, y);
+		draw8Points(hdc, center, x, y);
 	}
 }

@@ -4,5 +4,5 @@
 class BresenhamLineDrawer : public LineDrawer
 {
 public:
-	void drawLine(HDC hdc, double xs, double ys, double xe, double ye);
+	void drawLine(HDC hdc, Point startPoint, Point endPoint);
 };

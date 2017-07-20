@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Circle\BasicPolarCircleDrawer.h"
 
-void BasicPolarCircleDrawer::drawCircle(HDC hdc, double xc, double yc, int radius)
+void BasicPolarCircleDrawer::drawCircle(HDC hdc, Point center, int radius)
 {
 	double dtheta = 1.0 / radius;
 	double x, y;
@@ -8,6 +8,6 @@ void BasicPolarCircleDrawer::drawCircle(HDC hdc, double xc, double yc, int radiu
 	{
 		x = radius*cos(theta);
 		y = radius*sin(theta);
-		draw8Points(hdc, xc, yc, round(x), round(y));
+		draw8Points(hdc, center, round(x), round(y));
 	}
 }

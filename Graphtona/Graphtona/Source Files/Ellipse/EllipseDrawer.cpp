@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Ellipse\EllipseDrawer.h"
 
-void EllipseDrawer::drawEllipse(HDC hdc, int xc, int yc, int width, int height)
+void EllipseDrawer::drawEllipse(HDC hdc, Point center, int width, int height)
 {
 	int a2 = width * width;
 	int b2 = height * height;
@@ -11,10 +11,10 @@ void EllipseDrawer::drawEllipse(HDC hdc, int xc, int yc, int width, int height)
 	for (x = 0, y = height, sigma = 2 * b2 + a2*(1 - 2 * height); b2*x <= a2*y; x++)
 	{
 
-		SetPixel(hdc, xc + x, yc + y, color);
-		SetPixel(hdc, xc - x, yc + y, color);
-		SetPixel(hdc, xc + x, yc - y, color);
-		SetPixel(hdc, xc - x, yc - y, color);
+		SetPixel(hdc, center.x + x, center.y + y, color);
+		SetPixel(hdc, center.x - x, center.y + y, color);
+		SetPixel(hdc, center.x + x, center.y - y, color);
+		SetPixel(hdc, center.x - x, center.y - y, color);
 		if (sigma >= 0)
 		{
 			sigma += fa2 * (1 - y);
@@ -25,10 +25,10 @@ void EllipseDrawer::drawEllipse(HDC hdc, int xc, int yc, int width, int height)
 
 	for (x = width, y = 0, sigma = 2 * a2 + b2*(1 - 2 * width); a2*y <= b2*x; y++)
 	{
-		SetPixel(hdc, xc + x, yc + y, color);
-		SetPixel(hdc, xc - x, yc + y, color);
-		SetPixel(hdc, xc + x, yc - y, color);
-		SetPixel(hdc, xc - x, yc - y, color);
+		SetPixel(hdc, center.x + x, center.y + y, color);
+		SetPixel(hdc, center.x - x, center.y + y, color);
+		SetPixel(hdc, center.x + x, center.y - y, color);
+		SetPixel(hdc, center.x - x, center.y - y, color);
 		if (sigma >= 0)
 		{
 			sigma += fb2 * (1 - x);
