@@ -149,6 +149,11 @@
     <ClInclude Include="Header Files\Circle\BasicPolarCircleDrawer.h" />
     <ClInclude Include="Header Files\Circle\BresenhamCircleDrawer.h" />
     <ClInclude Include="Header Files\Circle\ImprovedPolarCircleDrawer.h" />
+    <ClInclude Include="Header Files\Curve\BezierCurveDrawer.h" />
+    <ClInclude Include="Header Files\Curve\CurveDrawer.h" />
+    <ClInclude Include="Header Files\Curve\FirstDegreeCurveDrawer.h" />
+    <ClInclude Include="Header Files\Curve\HermiteCurveDrawer.h" />
+    <ClInclude Include="Header Files\Curve\SecondDegreeCurveDrawer.h" />
     <ClInclude Include="Header Files\Line\BresenhamLineDrawer.h" />
     <ClInclude Include="Header Files\Circle\CartesianCircleDrawer.h" />
     <ClInclude Include="Header Files\Circle\CircleDrawer.h" />
@@ -157,6 +162,7 @@
     <ClInclude Include="Graphtona.h" />
     <ClInclude Include="Header Files\Line\LineDrawer.h" />
     <ClInclude Include="Header Files\Line\ParametricLineDrawer.h" />
+    <ClInclude Include="Header Files\Point.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -169,6 +175,24 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Circle\BresenhamCircleDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Circle\CircleDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Curve\BezierCurveDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Curve\CurveDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Curve\FirstDegreeCurveDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Curve\HermiteCurveDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Curve\SecondDegreeCurveDrawer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Line\BresenhamLineDrawer.cpp">
@@ -190,6 +214,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Line\ParametricLineDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Point.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">

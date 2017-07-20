@@ -6,126 +6,10 @@
 #include "Header Files\Circle\ImprovedPolarCircleDrawer.h"
 #include "Header Files\Circle\BresenhamCircleDrawer.h"
 #include "Header Files\Ellipse\EllipseDrawer.h"
-
-void drawFirstDegreeCurve(HDC hdc, double xs, double ys, double xe, double ye)
-{
-	double beta1 = xs;
-	double beta2 = ys;
-	double alpha1 = xe - xs;
-	double alpha2 = ye - ys;
-
-	double dt = 1 / max(abs(alpha1), abs(alpha2));
-
-	double x, y;
-	double t = 0;
-	int i = 0;
-	while (i <= max(abs(alpha1), abs(alpha2)))
-	{
-		x = alpha1*t + beta1;
-		y = alpha2*t + beta2;
-		SetPixel(hdc, x, y, RGB(0, 0, 0));
-		t += dt;
-		i++;
-	}
-}
-
-void drawSecondDegreeCurve(HDC hdc, double xs, double ys, double xe, double ye, double s1x, double s1y)
-{
-	double beta1 = xs;
-	double beta2 = ys;
-	double alpha1 = xe - xs;
-	double alpha2 = ye - ys;
-	double gamma1 = s1x;
-	double gamma2 = s1y;
-
-	double dt = 1 / max(abs(alpha1), abs(alpha2));
-
-	double x, y;
-	double t = 0;
-	int i = 0;
-	while (i <= max(abs(alpha1), abs(alpha2)))
-	{
-		x = alpha1*t*t + beta1*t + gamma1;
-		y = alpha2*t*t + beta2*t + gamma2;
-		SetPixel(hdc, x, y, RGB(0, 0, 0));
-		t += dt;
-		i++;
-	}
-}
-
-int mulitplyTwoVectors(int v1[], int v2[], int size)
-{
-	int ret = 0;
-	for (int i = 0;i < size;i++)
-		ret += v1[i] * v2[i];
-	return ret;
-}
-
-void drawHermiteCurve(HDC hdc, double xs, double ys, double s1x, double s1y, double xe, double ye, double s2x, double s2y)
-{
-	int hermiteMatrix[4][4] = { { 2, 1, -2, 1 },{ -3, -2, 3, -1 },{ 0, 1, 0, 0 },{ 1, 0, 0, 0 } };
-	int inputX[4] = { xs, s1x, xe, s2x };
-	int inputY[4] = { ys, s1y, ye, s2y };
-	// each row in the matrix with the vector of xs and ys
-	double alpha1 = mulitplyTwoVectors(hermiteMatrix[0], inputX, 4), alpha2 = mulitplyTwoVectors(hermiteMatrix[0], inputY, 4);
-	double beta1 = mulitplyTwoVectors(hermiteMatrix[1], inputX, 4), beta2 = mulitplyTwoVectors(hermiteMatrix[1], inputY, 4);
-	double gamma1 = mulitplyTwoVectors(hermiteMatrix[2], inputX, 4), gamma2 = mulitplyTwoVectors(hermiteMatrix[2], inputY, 4);
-	double sigma1 = mulitplyTwoVectors(hermiteMatrix[3], inputX, 4), sigma2 = mulitplyTwoVectors(hermiteMatrix[3], inputY, 4);
-
-	double dt = 1 / max(abs(ye - ys), abs(xe - xs));
-	double x, y;
-	double t = 0;
-	int i = 0;
-	while (i <= max(abs(ye - ys), abs(xe - xs)))
-	{
-		x = alpha1*(t*t*t) + beta1*(t*t) + gamma1*(t)+sigma1;
-		y = alpha2*(t*t*t) + beta2*(t*t) + gamma2*(t)+sigma2;
-		SetPixel(hdc, x, y, RGB(0, 0, 0));
-		t += dt;
-		i++;
-	}
-}
-
-void drawBezierCurve(HDC hdc, double xs, double ys, double s1x, double s1y, double xe, double ye, double s2x, double s2y)
-{
-	int bezierMatrix[4][4] = { { -1, 3, -3, 1 },{ 3, -6, 3, 0 },{ -3, 3, 0, 0 },{ 1, 0, 0, 0 } };
-	int inputX[4] = { xs, s1x, xe, s2x };
-	int inputY[4] = { ys, s1y, ye, s2y };
-
-	// each row in the matrix with the vector of xs and ys
-	double alpha1 = mulitplyTwoVectors(bezierMatrix[0], inputX, 4), alpha2 = mulitplyTwoVectors(bezierMatrix[0], inputY, 4);
-	double beta1 = mulitplyTwoVectors(bezierMatrix[1], inputX, 4), beta2 = mulitplyTwoVectors(bezierMatrix[1], inputY, 4);
-	double gamma1 = mulitplyTwoVectors(bezierMatrix[2], inputX, 4), gamma2 = mulitplyTwoVectors(bezierMatrix[2], inputY, 4);
-	double sigma1 = mulitplyTwoVectors(bezierMatrix[3], inputX, 4), sigma2 = mulitplyTwoVectors(bezierMatrix[3], inputY, 4);
-
-	double dt = 1 / max(abs(ye - ys), abs(xe - xs));
-	double x, y;
-	double t = 0;
-	int i = 0;
-	while (i <= max(abs(ye - ys), abs(xe - xs)))
-	{
-		x = alpha1*(t*t*t) + beta1*(t*t) + gamma1*(t)+sigma1;
-		y = alpha2*(t*t*t) + beta2*(t*t) + gamma2*(t)+sigma2;
-		SetPixel(hdc, x, y, RGB(0, 0, 0));
-		t += dt;
-		i++;
-	}
-}
-
-void drawSplines(HDC hdc, POINT points[], int numberOfPoints, double c) // c is the tension of the curve (0---1)
-{
-	double s1x = (1 - c)*(points[2].x - points[0].x); // slope at Pi
-	double s1y = (1 - c)*(points[2].y - points[0].y);
-
-	for (int i = 2;i < numberOfPoints - 1;i++)
-	{
-		double s2x = (1 - c)*(points[i + 1].x - points[i - 1].x);
-		double s2y = (1 - c)*(points[i + 1].y - points[i - 1].y);
-		drawHermiteCurve(hdc, points[i - 1].x, points[i - 1].y, s1x, s1y, points[i].x, points[i].y, s2x, s2y);
-		s1x = s2x;
-		s1y = s2y;
-	}
-}
+#include "Header Files\Curve\FirstDegreeCurveDrawer.h"
+#include "Header Files\Curve\SecondDegreeCurveDrawer.h"
+#include "Header Files\Curve\HermiteCurveDrawer.h"
+#include "Header Files\Curve\BezierCurveDrawer.h"
 
 struct EdgeRec {
 	int xLeft, xRight;
@@ -511,7 +395,15 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				circleDrawer->drawCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
 			else if (ch == 12)
-				drawFirstDegreeCurve(hdc, x1, y1, x2, y2);
+			{
+				CurveDrawer *curveDrawer = new FirstDegreeCurveDrawer();
+				Point startPoint, endPoint;
+				startPoint.x = x1;
+				startPoint.y = y1;
+				endPoint.x = x2;
+				endPoint.y = y2;
+				curveDrawer->drawCurve(hdc, startPoint, endPoint, {});
+			}
 			else if (ch == 22)
 				fillCircle(hdc, x1, y1, sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			else if (ch == 23)
@@ -551,7 +443,18 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			s1y = HIWORD(lp);
 
 			if (ch == 13)
-				drawSecondDegreeCurve(hdc, x1, y1, s1x, s2y, x2, y2);
+			{
+				CurveDrawer *curveDrawer = new SecondDegreeCurveDrawer();
+				Point startPoint, endPoint;
+				startPoint.x = x1;
+				startPoint.y = y1;
+				endPoint.x = x2;
+				endPoint.y = y2;
+				Point slopes[1];
+				slopes[0].x = s1x;
+				slopes[0].y = s1y;
+				curveDrawer->drawCurve(hdc, startPoint, endPoint, slopes);
+			}
 			else
 			{
 				isThirdPress = 0;
@@ -570,12 +473,38 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			s2y = HIWORD(lp);
 
 			if (ch == 14)
-				drawHermiteCurve(hdc, x1, y1, s1x, s1y, x2, y2, s2x, s2y);
+			{
+				CurveDrawer *curveDrawer = new HermiteCurveDrawer();
+				Point startPoint, endPoint;
+				startPoint.x = x1;
+				startPoint.y = y1;
+				endPoint.x = x2;
+				endPoint.y = y2;
+				Point slopes[2];
+				slopes[0].x = s1x;
+				slopes[0].y = s1y;
+				slopes[1].x = s2x;
+				slopes[1].y = s2y;
+				curveDrawer->drawCurve(hdc, startPoint, endPoint, slopes);
+			}
 			else if (ch == 15)
-				drawBezierCurve(hdc, x1, y1, s1x, s1y, x2, y2, s2x, s2y);
+			{
+				CurveDrawer *curveDrawer = new BezierCurveDrawer();
+				Point startPoint, endPoint;
+				startPoint.x = x1;
+				startPoint.y = y1;
+				endPoint.x = x2;
+				endPoint.y = y2;
+				Point slopes[2];
+				slopes[0].x = s1x;
+				slopes[0].y = s1y;
+				slopes[1].x = s2x;
+				slopes[1].y = s2y;
+				curveDrawer->drawCurve(hdc, startPoint, endPoint, slopes);
+			}
 			else if (ch == 16)
 			{
-				POINT points[4];
+				Point points[4];
 				points[0].x = x1;
 				points[0].y = y1;
 				points[1].x = s1x;
@@ -584,7 +513,8 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 				points[2].y = y2;
 				points[3].x = s2x;
 				points[3].y = s2y;
-				drawSplines(hdc, points, 4, 0.06);
+				HermiteCurveDrawer hermiteCurveDrawer;
+				hermiteCurveDrawer.drawSpline(hdc, points, 4, 0.06);
 			}
 			else if (ch == 17)
 			{

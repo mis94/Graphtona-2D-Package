@@ -1,5 +1,6 @@
 #pragma once
 #include "..\stdafx.h"
+#include "Point.h"
 
 class Algorithm
 {
