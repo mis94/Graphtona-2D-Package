@@ -1,6 +1,6 @@
 #pragma once
 #include "Clipper.h"
-#include "..\Line\ParametricLineDrawer.h"
+#include "..\Line\BresenhamLineDrawer.h"
 
 union OutCode
 {

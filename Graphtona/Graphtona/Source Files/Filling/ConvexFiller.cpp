@@ -26,7 +26,7 @@ void ConvexFiller::convexFill(HDC hdc, Point* points, int numberOfPoints)
 	horizontal:v1 = points[i];
 	}
 
-	LineDrawer *lineDrawer = new ParametricLineDrawer();
+	LineDrawer *lineDrawer = new BresenhamLineDrawer();
 	for (int i = 0;i < 800;i++)
 	{
 		if (table[i].xLeft < table[i].xRight)

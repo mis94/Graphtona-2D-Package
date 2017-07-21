@@ -20,7 +20,7 @@ RectangleClipper::RectangleClipper(HDC hdc, int yTop, int yBottom, int xLeft, in
 
 void RectangleClipper::drawClippingShape(HDC hdc)
 {
-	LineDrawer *lineDrawer = new ParametricLineDrawer();
+	LineDrawer *lineDrawer = new BresenhamLineDrawer();
 	lineDrawer->drawLine(hdc, Point(xLeft, yTop), Point(xRight, yTop));
 	lineDrawer->drawLine(hdc, Point(xLeft, yBottom), Point(xRight, yBottom));
 	lineDrawer->drawLine(hdc, Point(xLeft, yTop), Point(xLeft, yBottom));
@@ -104,7 +104,7 @@ void RectangleClipper::clipLine(HDC hdc, Point startPoint, Point endPoint)
 			out2 = getOutCode(endPoint);
 		}
 	}
-	LineDrawer *lineDrawer = new ParametricLineDrawer();
+	LineDrawer *lineDrawer = new BresenhamLineDrawer();
 	if (!out1.All && !out2.All)
 		lineDrawer->drawLine(hdc, startPoint, endPoint);
 }

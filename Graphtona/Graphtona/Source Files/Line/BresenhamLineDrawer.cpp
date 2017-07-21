@@ -16,10 +16,10 @@ void BresenhamLineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
 		{
 			swap(ixs, ixe);
 			swap(iys, iye);
-			deltaX = abs(deltaX);
-			deltaY = abs(deltaY);
 		}
 
+		deltaX = abs(deltaX);
+		deltaY = abs(deltaY);
 		int error = 2 * deltaY - deltaX;
 		int d1 = 2 * deltaY;
 		int d2 = 2 * (deltaY - deltaX);
@@ -53,9 +53,10 @@ void BresenhamLineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
 		{
 			swap(ixs, ixe);
 			swap(iys, iye);
-			deltaX = abs(deltaX);
-			deltaY = abs(deltaY);
 		}
+
+		deltaX = abs(deltaX);
+		deltaY = abs(deltaY);
 
 		int error = 2 * deltaX - deltaY;
 		int d1 = 2 * deltaX;

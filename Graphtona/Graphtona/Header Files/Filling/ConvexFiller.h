@@ -2,7 +2,7 @@
 #include "..\Algorithm.h"
 #include "..\Circle\BresenhamCircleDrawer.h"
 #include "EdgeRecord.h"
-#include "..\Line\ParametricLineDrawer.h"
+#include "..\Line\BresenhamLineDrawer.h"
 
 class ConvexFiller : public Algorithm
 {

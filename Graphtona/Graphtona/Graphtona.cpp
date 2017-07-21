@@ -42,6 +42,57 @@ int algo1 = 1, algo2 = 2, algo3 = 3, algo4 = 4, algo5 = 5, algo6 = 6, algo7 = 7,
 int algo11 = 11, algo12 = 12, algo13 = 13, algo14 = 14, algo15 = 15, algo16 = 16, algo17 = 17, algo18 = 18, algo19 = 19;
 int algo20 = 20, algo21 = 21, algo22 = 22, algo23 = 23;
 
+HMENU createMenuBar()
+{
+	HMENU hMenuBar = CreateMenu();
+
+	HMENU hFile1 = CreateMenu(); // background color
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile1, L"Change Background color");
+	AppendMenu(hFile1, MF_STRING, algo1, L"Black");
+	AppendMenu(hFile1, MF_STRING, algo2, L"Red");
+	AppendMenu(hFile1, MF_STRING, algo3, L"White");
+	AppendMenu(hFile1, MF_STRING, algo4, L"Gray");
+
+	HMENU hFile2 = CreateMenu(); // line
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile2, L"Line");
+	AppendMenu(hFile2, MF_STRING, algo5, L"Simple Line DDA");
+	AppendMenu(hFile2, MF_STRING, algo6, L"Parametric line");
+	AppendMenu(hFile2, MF_STRING, algo7, L"Bresenham midpoint algorithm");
+
+	HMENU hFile3 = CreateMenu(); // circle
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile3, L"Circle");
+	AppendMenu(hFile3, MF_STRING, algo8, L"Direct Cartesian method");
+	AppendMenu(hFile3, MF_STRING, algo9, L"Polar direct method");
+	AppendMenu(hFile3, MF_STRING, algo10, L"Iterative polar algorithm");
+	AppendMenu(hFile3, MF_STRING, algo11, L"Bresenham midpoint algorithm");
+
+	HMENU hFile7 = CreateMenu(); // ellipse
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile7, L"Ellipse");
+	AppendMenu(hFile7, MF_STRING, algo23, L"Ellipse Drawing");
+
+	HMENU hFile4 = CreateMenu(); // curve
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile4, L"Curve");
+	AppendMenu(hFile4, MF_STRING, algo12, L"First Degree");
+	AppendMenu(hFile4, MF_STRING, algo13, L"Second Degree");
+	AppendMenu(hFile4, MF_STRING, algo14, L"Hermite");
+	AppendMenu(hFile4, MF_STRING, algo15, L"Bezier");
+	AppendMenu(hFile4, MF_STRING, algo16, L"Splines");
+
+	HMENU hFile5 = CreateMenu(); // convex filling
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile5, L"Filling");
+	AppendMenu(hFile5, MF_STRING, algo17, L"Convex filling");
+	AppendMenu(hFile5, MF_STRING, algo22, L"Circle filling");
+
+	HMENU hFile6 = CreateMenu(); // convex filling
+	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile6, L"Clipping");
+	AppendMenu(hFile6, MF_STRING, algo18, L"Point according to rectangle");
+	AppendMenu(hFile6, MF_STRING, algo19, L"Line according to rectangle");
+	AppendMenu(hFile6, MF_STRING, algo20, L"Point according to circle");
+	AppendMenu(hFile6, MF_STRING, algo21, L"Line according to circle");
+
+	return hMenuBar;
+}
+
 LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 {
 	HDC hdc; //handle of device context
@@ -50,52 +101,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 
 	switch (mcode) {
 	case WM_CREATE: {
-		HMENU hMenubar = CreateMenu();
-
-		HMENU hFile1 = CreateMenu(); // background color
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile1, L"Change Background color");
-		AppendMenu(hFile1, MF_STRING, algo1, L"Black");
-		AppendMenu(hFile1, MF_STRING, algo2, L"Red");
-		AppendMenu(hFile1, MF_STRING, algo3, L"White");
-		AppendMenu(hFile1, MF_STRING, algo4, L"Gray");
-
-		HMENU hFile2 = CreateMenu(); // line
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile2, L"Line");
-		AppendMenu(hFile2, MF_STRING, algo5, L"Simple Line DDA");
-		AppendMenu(hFile2, MF_STRING, algo6, L"Parametric line");
-		AppendMenu(hFile2, MF_STRING, algo7, L"Bresenham midpoint algorithm");
-
-		HMENU hFile3 = CreateMenu(); // circle
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile3, L"Circle");
-		AppendMenu(hFile3, MF_STRING, algo8, L"Direct Cartesian method");
-		AppendMenu(hFile3, MF_STRING, algo9, L"Polar direct method");
-		AppendMenu(hFile3, MF_STRING, algo10, L"Iterative polar algorithm");
-		AppendMenu(hFile3, MF_STRING, algo11, L"Bresenham midpoint algorithm");
-
-		HMENU hFile7 = CreateMenu(); // ellipse
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile7, L"Ellipse");
-		AppendMenu(hFile7, MF_STRING, algo23, L"Ellipse Drawing");
-
-		HMENU hFile4 = CreateMenu(); // curve
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile4, L"Curve");
-		AppendMenu(hFile4, MF_STRING, algo12, L"First Degree");
-		AppendMenu(hFile4, MF_STRING, algo13, L"Second Degree");
-		AppendMenu(hFile4, MF_STRING, algo14, L"Hermite");
-		AppendMenu(hFile4, MF_STRING, algo15, L"Bezier");
-		AppendMenu(hFile4, MF_STRING, algo16, L"Splines");
-
-		HMENU hFile5 = CreateMenu(); // convex filling
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile5, L"Filling");
-		AppendMenu(hFile5, MF_STRING, algo17, L"Convex filling");
-		AppendMenu(hFile5, MF_STRING, algo22, L"Circle filling");
-
-		HMENU hFile6 = CreateMenu(); // convex filling
-		AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hFile6, L"Clipping");
-		AppendMenu(hFile6, MF_STRING, algo18, L"Point according to rectangle");
-		AppendMenu(hFile6, MF_STRING, algo19, L"Line according to rectangle");
-		AppendMenu(hFile6, MF_STRING, algo20, L"Point according to circle");
-		AppendMenu(hFile6, MF_STRING, algo21, L"Line according to circle");
-
+		HMENU hMenubar = createMenuBar();
 		SetMenu(hWnd, hMenubar);
 	}break;
 	case WM_COMMAND:
@@ -223,12 +229,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			else if (ch == 12)
 			{
 				CurveDrawer *curveDrawer = new FirstDegreeCurveDrawer();
-				Point startPoint, endPoint;
-				startPoint.x = x1;
-				startPoint.y = y1;
-				endPoint.x = x2;
-				endPoint.y = y2;
-				curveDrawer->drawCurve(hdc, startPoint, endPoint, {});
+				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), {});
 			}
 			else if (ch == 22)
 			{
@@ -269,15 +270,8 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			if (ch == 13)
 			{
 				CurveDrawer *curveDrawer = new SecondDegreeCurveDrawer();
-				Point startPoint, endPoint;
-				startPoint.x = x1;
-				startPoint.y = y1;
-				endPoint.x = x2;
-				endPoint.y = y2;
-				Point slopes[1];
-				slopes[0].x = s1x;
-				slopes[0].y = s1y;
-				curveDrawer->drawCurve(hdc, startPoint, endPoint, slopes);
+				Point slopes[] = { Point(s1x, s1y) };
+				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}
 			else
 			{
@@ -299,58 +293,24 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			if (ch == 14)
 			{
 				CurveDrawer *curveDrawer = new HermiteCurveDrawer();
-				Point startPoint, endPoint;
-				startPoint.x = x1;
-				startPoint.y = y1;
-				endPoint.x = x2;
-				endPoint.y = y2;
-				Point slopes[2];
-				slopes[0].x = s1x;
-				slopes[0].y = s1y;
-				slopes[1].x = s2x;
-				slopes[1].y = s2y;
-				curveDrawer->drawCurve(hdc, startPoint, endPoint, slopes);
+				Point slopes[] = {Point(s1x, s1y), Point(s2x, s2y)};
+				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}
 			else if (ch == 15)
 			{
 				CurveDrawer *curveDrawer = new BezierCurveDrawer();
-				Point startPoint, endPoint;
-				startPoint.x = x1;
-				startPoint.y = y1;
-				endPoint.x = x2;
-				endPoint.y = y2;
-				Point slopes[2];
-				slopes[0].x = s1x;
-				slopes[0].y = s1y;
-				slopes[1].x = s2x;
-				slopes[1].y = s2y;
-				curveDrawer->drawCurve(hdc, startPoint, endPoint, slopes);
+				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
+				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}
 			else if (ch == 16)
 			{
-				Point points[4];
-				points[0].x = x1;
-				points[0].y = y1;
-				points[1].x = s1x;
-				points[1].y = s1y;
-				points[2].x = x2;
-				points[2].y = y2;
-				points[3].x = s2x;
-				points[3].y = s2y;
+				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				HermiteCurveDrawer hermiteCurveDrawer;
 				hermiteCurveDrawer.drawSpline(hdc, points, 4, 0.06);
 			}
 			else if (ch == 17)
 			{
-				Point points[4];
-				points[0].x = x1;
-				points[0].y = y1;
-				points[1].x = s1x;
-				points[1].y = s1y;
-				points[2].x = x2;
-				points[2].y = y2;
-				points[3].x = s2x;
-				points[3].y = s2y;
+				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				ConvexFiller convexFiller;
 				convexFiller.convexFill(hdc, points, 4);
 			}
@@ -370,10 +330,8 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 	}
 }
 
-
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winFormat)
+WNDCLASSEX prepareWindowClass(HINSTANCE hInst)
 {
-	HWND hWnd;
 	WNDCLASSEX wndClassEx;
 	wndClassEx.cbClsExtra = 0;
 	wndClassEx.cbSize = sizeof(wndClassEx);
@@ -384,12 +342,20 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winF
 	wndClassEx.hInstance = hInst;
 	wndClassEx.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 	wndClassEx.lpfnWndProc = MyWindowProcedure;
-	wndClassEx.lpszClassName = L"myClass";
+	wndClassEx.lpszClassName = L"graphtonaWindowClass";
 	wndClassEx.lpszMenuName = NULL;
 	wndClassEx.style = CS_HREDRAW | CS_VREDRAW;
+	return wndClassEx;
+}
+
+int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winFormat)
+{
+	HWND hWnd;
+
+	WNDCLASSEX wndClassEx = prepareWindowClass(hInst);
 	RegisterClassEx(&wndClassEx);
 
-	hWnd = CreateWindowEx(0, L"myClass", L"Graphtona", WS_OVERLAPPEDWINDOW, 0, 0, 800, 600, NULL, NULL, hInst, 0);
+	hWnd = CreateWindowEx(0, L"graphtonaWindowClass", L"Graphtona", WS_OVERLAPPEDWINDOW, 0, 0, 800, 600, NULL, NULL, hInst, 0);
 	ShowWindow(hWnd, winFormat);
 	UpdateWindow(hWnd);
 
