@@ -11,6 +11,8 @@
 #include "Header Files\Curve\HermiteCurveDrawer.h"
 #include "Header Files\Curve\BezierCurveDrawer.h"
 #include "Header Files\Filling\ConvexFiller.h"
+#include "Header Files\Clipping\RectangleClipper.h"
+#include "Header Files\Clipping\CircleClipper.h"
 
 enum Color {
 	Black,
@@ -36,127 +38,10 @@ void changeBackgroundColor(HWND hWnd, Color newColor)
 	InvalidateRect(hWnd, NULL, TRUE);
 }
 
-int Wtop = 60, Wbottom = 500, Wleft = 60, Wright = 500;
-
-void clipPoint(HDC hdc, int xs, int ys, int xleft, int xright, int ytop, int ybottom)
-{
-	if (xs <= xright&&xs >= xleft)
-	{
-		if (ys >= ytop&&ys <= ybottom)
-			SetPixel(hdc, xs, ys, RGB(0, 0, 0));
-	}
-}
-
-union OutCode {
-
-	unsigned All : 4;
-	struct {
-		unsigned left : 1, top : 1, right : 1, bottom : 1;
-	};
-};
-
-OutCode getOutCode(double x, double y, int xleft, int xright, int ytop, int ybottom)
-{
-	OutCode out;
-	out.All = 0;
-	if (x < xleft)
-		out.left = 1;
-	else if (x>xright)
-		out.right = 1;
-
-	if (y<ytop)
-		out.top = 1;
-	if (y>ybottom)
-		out.bottom = 1;
-	return out;
-}
-
-void verticalIntersect(double xs, double ys, double xe, double ye, int x, double *xi, double *yi)
-{
-	*xi = x;
-	*yi = ys + (x - xs) * (ye - ys) / (xe - xs);
-}
-
-void horizontalIntersect(double xs, double ys, double xe, double ye, int y, double *xi, double *yi)
-{
-	*yi = y;
-	*xi = xs + (y - ys) * (xe - xs) / (ye - ys);
-}
-
-void clipLine(HDC hdc, int xs, int ys, int xe, int ye, int xleft, int xright, int ytop, int ybottom)
-{
-	double x1 = xs, x2 = xe, y1 = ys, y2 = ye;
-	OutCode out1 = getOutCode(x1, y1, xleft, xright, ytop, ybottom);
-	OutCode out2 = getOutCode(x2, y2, xleft, xright, ytop, ybottom);
-	// we stop the loop if all = 0 (draw) or both have a common side (clip)
-	while ((out1.All || out2.All) && !(out1.All & out2.All))
-	{
-		double xi, yi;
-		if (out1.All)
-		{
-			if (out1.left)
-				verticalIntersect(x1, y1, x2, y2, xleft, &xi, &yi);
-			else if (out1.right)
-				verticalIntersect(x1, y1, x2, y2, xright, &xi, &yi);
-			else if (out1.top)
-				horizontalIntersect(x1, y1, x2, y2, ytop, &xi, &yi);
-			else
-				horizontalIntersect(x1, y1, x2, y2, ybottom, &xi, &yi);
-			x1 = xi;
-			y1 = yi;
-			out1 = getOutCode(x1, y1, xleft, xright, ytop, ybottom);
-		}
-		else
-		{
-			if (out2.left)
-				verticalIntersect(x1, y1, x2, y2, xleft, &xi, &yi);
-			else if (out2.right)
-				verticalIntersect(x1, y1, x2, y2, xright, &xi, &yi);
-			else if (out2.top)
-				horizontalIntersect(x1, y1, x2, y2, ytop, &xi, &yi);
-			else
-				horizontalIntersect(x1, y1, x2, y2, ybottom, &xi, &yi);
-			x2 = xi;
-			y2 = yi;
-			out2 = getOutCode(x2, y2, xleft, xright, ytop, ybottom);
-		}
-	}
-	LineDrawer *lineDrawer = new ParametricLineDrawer();
-	if (!out1.All && !out2.All)
-		lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
-}
-
-void clipPointToCircle(HDC hdc, int xs, int ys, int xc, int yc, int radius)
-{
-	int distance = sqrt((xs - xc)*(xs - xc) + (ys - yc)*(ys - yc));
-	if (distance <= radius)
-		SetPixel(hdc, xs, ys, RGB(0, 0, 0));
-}
-
-void clipLineToCircle(HDC hdc, int xa, int ya, int xb, int yb, double ccX, double ccY, double R) {
-	int dx = xb - xa, dy = yb - ya, steps, k;
-	float xIncrement, yIncrement, x = xa, y = ya;
-	if (abs(dx) > abs(dy)) steps = abs(dx);
-	else steps = abs(dy);
-	xIncrement = dx / (float)steps;
-	yIncrement = dy / (float)steps;
-
-	double rClipping;
-
-	for (int k = 0; k < steps; k++) {
-		rClipping = sqrt((x - ccX)*(x - ccX) + (y - ccY)*(y - ccY));
-		if (rClipping < R) {
-			SetPixel(hdc, x, y, RGB(0, 0, 0));
-		}
-		x += xIncrement;
-		y += yIncrement;
-
-	}
-}
-
 int algo1 = 1, algo2 = 2, algo3 = 3, algo4 = 4, algo5 = 5, algo6 = 6, algo7 = 7, algo8 = 8, algo9 = 9, algo10 = 10, ch = -1;
 int algo11 = 11, algo12 = 12, algo13 = 13, algo14 = 14, algo15 = 15, algo16 = 16, algo17 = 17, algo18 = 18, algo19 = 19;
 int algo20 = 20, algo21 = 21, algo22 = 22, algo23 = 23;
+
 LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 {
 	HDC hdc; //handle of device context
@@ -276,18 +161,13 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 
 			if (ch == 18)
 			{
-				LineDrawer *lineDrawer = new ParametricLineDrawer();
-				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wright, Wtop));
-				lineDrawer->drawLine(hdc, Point(Wleft, Wbottom), Point(Wright, Wbottom));
-				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wleft, Wbottom));
-				lineDrawer->drawLine(hdc, Point(Wright, Wtop), Point(Wright, Wbottom));
-				clipPoint(hdc, x1, y1, Wleft, Wright, Wtop, Wbottom);
+				RectangleClipper rectangleClipper(hdc);
+				rectangleClipper.clipPoint(hdc, Point(x1, y1));
 			}
 			else if (ch == 20)
 			{
-				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
-				circleDrawer->drawCircle(hdc, Point(450, 250), 150);
-				clipPointToCircle(hdc, x1, y1, 450, 250, 150);
+				CircleClipper circleClipper(hdc);
+				circleClipper.clipPoint(hdc, Point(x1, y1));
 			}
 			else
 			{
@@ -362,18 +242,13 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			}
 			else if (ch == 19)
 			{
-				LineDrawer *lineDrawer = new ParametricLineDrawer();
-				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wright, Wtop));
-				lineDrawer->drawLine(hdc, Point(Wleft, Wbottom), Point(Wright, Wbottom));
-				lineDrawer->drawLine(hdc, Point(Wleft, Wtop), Point(Wleft, Wbottom));
-				lineDrawer->drawLine(hdc, Point(Wright, Wtop), Point(Wright, Wbottom));
-				clipLine(hdc, x1, y1, x2, y2, Wleft, Wright, Wtop, Wbottom);
+				RectangleClipper rectangleClipper(hdc);
+				rectangleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
 			else if (ch == 21)
 			{
-				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
-				circleDrawer->drawCircle(hdc, Point(450, 250), 150);
-				clipLineToCircle(hdc, x1, y1, x2, y2, 450, 250, 150);
+				CircleClipper circleClipper(hdc);
+				circleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
 			else
 			{

@@ -149,6 +149,9 @@
     <ClInclude Include="Header Files\Circle\BasicPolarCircleDrawer.h" />
     <ClInclude Include="Header Files\Circle\BresenhamCircleDrawer.h" />
     <ClInclude Include="Header Files\Circle\ImprovedPolarCircleDrawer.h" />
+    <ClInclude Include="Header Files\Clipping\CircleClipper.h" />
+    <ClInclude Include="Header Files\Clipping\Clipper.h" />
+    <ClInclude Include="Header Files\Clipping\RectangleClipper.h" />
     <ClInclude Include="Header Files\Curve\BezierCurveDrawer.h" />
     <ClInclude Include="Header Files\Curve\CurveDrawer.h" />
     <ClInclude Include="Header Files\Curve\FirstDegreeCurveDrawer.h" />
@@ -180,6 +183,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Circle\CircleDrawer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Clipping\CircleClipper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Clipping\RectangleClipper.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Curve\BezierCurveDrawer.cpp">
