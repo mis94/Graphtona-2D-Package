@@ -15,20 +15,20 @@
 #include "Header Files\Clipping\CircleClipper.h"
 
 enum Color {
-	Black,
-	Red,
-	White,
-	Gray
+	black,
+	red,
+	white,
+	gray
 };
 
 void changeBackgroundColor(HWND hWnd, Color newColor)
 {
 	HBRUSH hbrush;
-	if (newColor == Black)
+	if (newColor == black)
 		hbrush = CreateSolidBrush(RGB(0, 0, 0));
-	else if (newColor == Red)
+	else if (newColor == red)
 		hbrush = CreateSolidBrush(RGB(255, 0, 0));
-	else if (newColor == White)
+	else if (newColor == white)
 		hbrush = CreateSolidBrush(RGB(255, 255, 255));
 	else
 		hbrush = CreateSolidBrush(RGB(128, 128, 128));
@@ -38,9 +38,31 @@ void changeBackgroundColor(HWND hWnd, Color newColor)
 	InvalidateRect(hWnd, NULL, TRUE);
 }
 
-int algo1 = 1, algo2 = 2, algo3 = 3, algo4 = 4, algo5 = 5, algo6 = 6, algo7 = 7, algo8 = 8, algo9 = 9, algo10 = 10, ch = -1;
-int algo11 = 11, algo12 = 12, algo13 = 13, algo14 = 14, algo15 = 15, algo16 = 16, algo17 = 17, algo18 = 18, algo19 = 19;
-int algo20 = 20, algo21 = 21, algo22 = 22, algo23 = 23;
+enum Option {
+	changeToColor1,
+	changeToColor2,
+	changeToColor3,
+	changeToColor4,
+	ddaLine,
+	parametricLine,
+	bresenhamLine,
+	cartesianCircle,
+	basicPolarCircle,
+	improvedPolarCircle,
+	bresenhamCircle,
+	ellipse,
+	firstDegree,
+	secondDegree,
+	hermite,
+	bezier,
+	spline,
+	convexFilling,
+	circleFilling,
+	clipPointRectangle,
+	clipLineRectangle,
+	clipPointCircle,
+	clipLineCircle
+};
 
 HMENU createMenuBar()
 {
@@ -48,47 +70,47 @@ HMENU createMenuBar()
 
 	HMENU hFile1 = CreateMenu(); // background color
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile1, L"Change Background color");
-	AppendMenu(hFile1, MF_STRING, algo1, L"Black");
-	AppendMenu(hFile1, MF_STRING, algo2, L"Red");
-	AppendMenu(hFile1, MF_STRING, algo3, L"White");
-	AppendMenu(hFile1, MF_STRING, algo4, L"Gray");
+	AppendMenu(hFile1, MF_STRING, changeToColor1, L"Black");
+	AppendMenu(hFile1, MF_STRING, changeToColor2, L"Red");
+	AppendMenu(hFile1, MF_STRING, changeToColor3, L"White");
+	AppendMenu(hFile1, MF_STRING, changeToColor4, L"Gray");
 
 	HMENU hFile2 = CreateMenu(); // line
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile2, L"Line");
-	AppendMenu(hFile2, MF_STRING, algo5, L"Simple Line DDA");
-	AppendMenu(hFile2, MF_STRING, algo6, L"Parametric line");
-	AppendMenu(hFile2, MF_STRING, algo7, L"Bresenham midpoint algorithm");
+	AppendMenu(hFile2, MF_STRING, ddaLine, L"Simple Line DDA");
+	AppendMenu(hFile2, MF_STRING, parametricLine, L"Parametric line");
+	AppendMenu(hFile2, MF_STRING, bresenhamLine, L"Bresenham midpoint algorithm");
 
 	HMENU hFile3 = CreateMenu(); // circle
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile3, L"Circle");
-	AppendMenu(hFile3, MF_STRING, algo8, L"Direct Cartesian method");
-	AppendMenu(hFile3, MF_STRING, algo9, L"Polar direct method");
-	AppendMenu(hFile3, MF_STRING, algo10, L"Iterative polar algorithm");
-	AppendMenu(hFile3, MF_STRING, algo11, L"Bresenham midpoint algorithm");
+	AppendMenu(hFile3, MF_STRING, cartesianCircle, L"Direct Cartesian method");
+	AppendMenu(hFile3, MF_STRING, basicPolarCircle, L"Polar direct method");
+	AppendMenu(hFile3, MF_STRING, improvedPolarCircle, L"Iterative polar algorithm");
+	AppendMenu(hFile3, MF_STRING, bresenhamCircle, L"Bresenham midpoint algorithm");
 
 	HMENU hFile7 = CreateMenu(); // ellipse
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile7, L"Ellipse");
-	AppendMenu(hFile7, MF_STRING, algo23, L"Ellipse Drawing");
+	AppendMenu(hFile7, MF_STRING, ellipse, L"Ellipse Drawing");
 
 	HMENU hFile4 = CreateMenu(); // curve
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile4, L"Curve");
-	AppendMenu(hFile4, MF_STRING, algo12, L"First Degree");
-	AppendMenu(hFile4, MF_STRING, algo13, L"Second Degree");
-	AppendMenu(hFile4, MF_STRING, algo14, L"Hermite");
-	AppendMenu(hFile4, MF_STRING, algo15, L"Bezier");
-	AppendMenu(hFile4, MF_STRING, algo16, L"Splines");
+	AppendMenu(hFile4, MF_STRING, firstDegree, L"First Degree");
+	AppendMenu(hFile4, MF_STRING, secondDegree, L"Second Degree");
+	AppendMenu(hFile4, MF_STRING, hermite, L"Hermite");
+	AppendMenu(hFile4, MF_STRING, bezier, L"Bezier");
+	AppendMenu(hFile4, MF_STRING, spline, L"Spline");
 
 	HMENU hFile5 = CreateMenu(); // convex filling
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile5, L"Filling");
-	AppendMenu(hFile5, MF_STRING, algo17, L"Convex filling");
-	AppendMenu(hFile5, MF_STRING, algo22, L"Circle filling");
+	AppendMenu(hFile5, MF_STRING, convexFilling, L"Convex filling");
+	AppendMenu(hFile5, MF_STRING, circleFilling, L"Circle filling");
 
-	HMENU hFile6 = CreateMenu(); // convex filling
+	HMENU hFile6 = CreateMenu(); // clipping
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile6, L"Clipping");
-	AppendMenu(hFile6, MF_STRING, algo18, L"Point according to rectangle");
-	AppendMenu(hFile6, MF_STRING, algo19, L"Line according to rectangle");
-	AppendMenu(hFile6, MF_STRING, algo20, L"Point according to circle");
-	AppendMenu(hFile6, MF_STRING, algo21, L"Line according to circle");
+	AppendMenu(hFile6, MF_STRING, clipPointRectangle, L"Point according to rectangle");
+	AppendMenu(hFile6, MF_STRING, clipLineRectangle, L"Line according to rectangle");
+	AppendMenu(hFile6, MF_STRING, clipPointCircle, L"Point according to circle");
+	AppendMenu(hFile6, MF_STRING, clipLineCircle, L"Line according to circle");
 
 	return hMenuBar;
 }
@@ -96,8 +118,9 @@ HMENU createMenuBar()
 LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 {
 	HDC hdc; //handle of device context
+	static int ch = -1;
 	static double x1, y1, s1x, s1y, x2, y2, s2x, s2y;
-	static bool isFirstPress = 1, isSecondPress = 1, isThirdPress = 1; // those could also be global
+	static bool isFirstPress = 1, isSecondPress = 1, isThirdPress = 1;
 
 	switch (mcode) {
 	case WM_CREATE: {
@@ -106,51 +129,51 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 	}break;
 	case WM_COMMAND:
 	{
-		if (LOWORD(wp) == algo1)
-			changeBackgroundColor(hWnd, Black);
-		else if (LOWORD(wp) == algo2)
-			changeBackgroundColor(hWnd, Red);
-		else if (LOWORD(wp) == algo3)
-			changeBackgroundColor(hWnd, White);
-		else if (LOWORD(wp) == algo4)
-			changeBackgroundColor(hWnd, Gray);
-		else if (LOWORD(wp) == algo5)
+		if (LOWORD(wp) == changeToColor1)
+			changeBackgroundColor(hWnd, black);
+		else if (LOWORD(wp) == changeToColor2)
+			changeBackgroundColor(hWnd, red);
+		else if (LOWORD(wp) == changeToColor3)
+			changeBackgroundColor(hWnd, white);
+		else if (LOWORD(wp) == changeToColor4)
+			changeBackgroundColor(hWnd, gray);
+		else if (LOWORD(wp) == ddaLine)
 			ch = 5;
-		else if (LOWORD(wp) == algo6)
+		else if (LOWORD(wp) == parametricLine)
 			ch = 6;
-		else if (LOWORD(wp) == algo7)
+		else if (LOWORD(wp) == bresenhamLine)
 			ch = 7;
-		else if (LOWORD(wp) == algo8)
+		else if (LOWORD(wp) == cartesianCircle)
 			ch = 8;
-		else if (LOWORD(wp) == algo9)
+		else if (LOWORD(wp) == basicPolarCircle)
 			ch = 9;
-		else if (LOWORD(wp) == algo10)
+		else if (LOWORD(wp) == improvedPolarCircle)
 			ch = 10;
-		else if (LOWORD(wp) == algo11)
+		else if (LOWORD(wp) == bresenhamCircle)
 			ch = 11;
-		else if (LOWORD(wp) == algo12)
+		else if (LOWORD(wp) == firstDegree)
 			ch = 12;
-		else if (LOWORD(wp) == algo13)
+		else if (LOWORD(wp) == secondDegree)
 			ch = 13;
-		else if (LOWORD(wp) == algo14)
+		else if (LOWORD(wp) == hermite)
 			ch = 14;
-		else if (LOWORD(wp) == algo15)
+		else if (LOWORD(wp) == bezier)
 			ch = 15;
-		else if (LOWORD(wp) == algo16)
+		else if (LOWORD(wp) == spline)
 			ch = 16;
-		else if (LOWORD(wp) == algo17)
+		else if (LOWORD(wp) == convexFilling)
 			ch = 17;
-		else if (LOWORD(wp) == algo18)
+		else if (LOWORD(wp) == clipPointRectangle)
 			ch = 18;
-		else if (LOWORD(wp) == algo19)
+		else if (LOWORD(wp) == clipLineRectangle)
 			ch = 19;
-		else if (LOWORD(wp) == algo20)
+		else if (LOWORD(wp) == clipPointCircle)
 			ch = 20;
-		else if (LOWORD(wp) == algo21)
+		else if (LOWORD(wp) == clipLineCircle)
 			ch = 21;
-		else if (LOWORD(wp) == algo22)
+		else if (LOWORD(wp) == circleFilling)
 			ch = 22;
-		else if (LOWORD(wp) == algo23)
+		else if (LOWORD(wp) == ellipse)
 			ch = 23;
 
 		isFirstPress = 1;
