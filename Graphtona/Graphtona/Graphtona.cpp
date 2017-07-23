@@ -138,43 +138,43 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 		else if (LOWORD(wp) == changeToColor4)
 			changeBackgroundColor(hWnd, gray);
 		else if (LOWORD(wp) == ddaLine)
-			ch = 5;
+			ch = ddaLine;
 		else if (LOWORD(wp) == parametricLine)
-			ch = 6;
+			ch = parametricLine;
 		else if (LOWORD(wp) == bresenhamLine)
-			ch = 7;
+			ch = bresenhamLine;
 		else if (LOWORD(wp) == cartesianCircle)
-			ch = 8;
+			ch = cartesianCircle;
 		else if (LOWORD(wp) == basicPolarCircle)
-			ch = 9;
+			ch = basicPolarCircle;
 		else if (LOWORD(wp) == improvedPolarCircle)
-			ch = 10;
+			ch = improvedPolarCircle;
 		else if (LOWORD(wp) == bresenhamCircle)
-			ch = 11;
+			ch = bresenhamCircle;
 		else if (LOWORD(wp) == firstDegree)
-			ch = 12;
+			ch = firstDegree;
 		else if (LOWORD(wp) == secondDegree)
-			ch = 13;
+			ch = secondDegree;
 		else if (LOWORD(wp) == hermite)
-			ch = 14;
+			ch = hermite;
 		else if (LOWORD(wp) == bezier)
-			ch = 15;
+			ch = bezier;
 		else if (LOWORD(wp) == spline)
-			ch = 16;
+			ch = spline;
 		else if (LOWORD(wp) == convexFilling)
-			ch = 17;
+			ch = convexFilling;
 		else if (LOWORD(wp) == clipPointRectangle)
-			ch = 18;
+			ch = clipPointRectangle;
 		else if (LOWORD(wp) == clipLineRectangle)
-			ch = 19;
+			ch = clipLineRectangle;
 		else if (LOWORD(wp) == clipPointCircle)
-			ch = 20;
+			ch = clipPointCircle;
 		else if (LOWORD(wp) == clipLineCircle)
-			ch = 21;
+			ch = clipLineCircle;
 		else if (LOWORD(wp) == circleFilling)
-			ch = 22;
+			ch = circleFilling;
 		else if (LOWORD(wp) == ellipse)
-			ch = 23;
+			ch = ellipse;
 
 		isFirstPress = 1;
 		isSecondPress = 1;
@@ -188,12 +188,12 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			x1 = LOWORD(lp);
 			y1 = HIWORD(lp);
 
-			if (ch == 18)
+			if (ch == clipPointRectangle)
 			{
 				RectangleClipper rectangleClipper(hdc);
 				rectangleClipper.clipPoint(hdc, Point(x1, y1));
 			}
-			else if (ch == 20)
+			else if (ch == clipPointCircle)
 			{
 				CircleClipper circleClipper(hdc);
 				circleClipper.clipPoint(hdc, Point(x1, y1));
@@ -214,62 +214,62 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			x2 = LOWORD(lp);
 			y2 = HIWORD(lp);
 
-			if (ch == 5)
+			if (ch == ddaLine)
 			{
 				LineDrawer *lineDrawer = new DDALineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
-			else if (ch == 6)
+			else if (ch == parametricLine)
 			{
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
-			else if (ch == 7)
+			else if (ch == bresenhamLine)
 			{
 				LineDrawer *lineDrawer = new BresenhamLineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
-			else if (ch == 8)
+			else if (ch == cartesianCircle)
 			{
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
-			else if (ch == 9)
+			else if (ch == basicPolarCircle)
 			{
 				CircleDrawer *circleDrawer = new BasicPolarCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
-			else if (ch == 10)
+			else if (ch == improvedPolarCircle)
 			{
 				CircleDrawer *circleDrawer = new ImprovedPolarCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
-			else if (ch == 11)
+			else if (ch == bresenhamCircle)
 			{
 				CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
-			else if (ch == 12)
+			else if (ch == firstDegree)
 			{
 				CurveDrawer *curveDrawer = new FirstDegreeCurveDrawer();
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), {});
 			}
-			else if (ch == 22)
+			else if (ch == circleFilling)
 			{
 				ConvexFiller convexFiller;
 				convexFiller.fillCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
-			else if (ch == 23)
+			else if (ch == ellipse)
 			{
 				EllipseDrawer ellipseDrawer;
 				ellipseDrawer.drawEllipse(hdc, Point(x1, y1), 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}
-			else if (ch == 19)
+			else if (ch == clipLineRectangle)
 			{
 				RectangleClipper rectangleClipper(hdc);
 				rectangleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
 			}
-			else if (ch == 21)
+			else if (ch == clipLineCircle)
 			{
 				CircleClipper circleClipper(hdc);
 				circleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
@@ -290,7 +290,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			s1x = LOWORD(lp);
 			s1y = HIWORD(lp);
 
-			if (ch == 13)
+			if (ch == secondDegree)
 			{
 				CurveDrawer *curveDrawer = new SecondDegreeCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y) };
@@ -313,25 +313,25 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			s2x = LOWORD(lp);
 			s2y = HIWORD(lp);
 
-			if (ch == 14)
+			if (ch == hermite)
 			{
 				CurveDrawer *curveDrawer = new HermiteCurveDrawer();
 				Point slopes[] = {Point(s1x, s1y), Point(s2x, s2y)};
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}
-			else if (ch == 15)
+			else if (ch == bezier)
 			{
 				CurveDrawer *curveDrawer = new BezierCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}
-			else if (ch == 16)
+			else if (ch == spline)
 			{
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				HermiteCurveDrawer hermiteCurveDrawer;
 				hermiteCurveDrawer.drawSpline(hdc, points, 4, 0.06);
 			}
-			else if (ch == 17)
+			else if (ch == convexFilling)
 			{
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				ConvexFiller convexFiller;
