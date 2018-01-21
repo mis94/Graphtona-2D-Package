@@ -24,15 +24,15 @@ enum Color {
 void changeBackgroundColor(HWND hWnd, Color newColor) {
 	HBRUSH hbrush;
 	switch (newColor) {
-	case black: {
+	case black:
 		hbrush = CreateSolidBrush(RGB(0, 0, 0));
-	}break;
-	case red: {
+		break;
+	case red:
 		hbrush = CreateSolidBrush(RGB(255, 0, 0));
-	}break;
-	case white: {
+		break;
+	case white:
 		hbrush = CreateSolidBrush(RGB(255, 255, 255));
-	}break;
+		break;
 	default: // gray color
 		hbrush = CreateSolidBrush(RGB(128, 128, 128));
 	}	
@@ -300,8 +300,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 	}
 }
 
-WNDCLASSEX prepareWindowClass(HINSTANCE hInst)
-{
+WNDCLASSEX prepareWindowClass(HINSTANCE hInst) {
 	WNDCLASSEX wndClassEx;
 	wndClassEx.cbClsExtra = 0;
 	wndClassEx.cbSize = sizeof(wndClassEx);
