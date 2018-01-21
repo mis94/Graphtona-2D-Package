@@ -21,8 +21,7 @@ enum Color {
 	gray
 };
 
-void changeBackgroundColor(HWND hWnd, Color newColor)
-{
+void changeBackgroundColor(HWND hWnd, Color newColor) {
 	HBRUSH hbrush;
 	switch (newColor) {
 	case black: {
@@ -56,8 +55,8 @@ enum Option {
 	improvedPolarCircle,
 	bresenhamCircle,
 	ellipse,
-	firstDegree,
-	secondDegree,
+	firstDegreeCurve,
+	secondDegreeCurve,
 	hermite,
 	bezier,
 	spline,
@@ -69,8 +68,7 @@ enum Option {
 	clipLineCircle
 };
 
-HMENU createMenuBar()
-{
+HMENU createMenuBar() {
 	HMENU hMenuBar = CreateMenu();
 
 	HMENU hFile1 = CreateMenu(); // background color
@@ -99,8 +97,8 @@ HMENU createMenuBar()
 
 	HMENU hFile4 = CreateMenu(); // curve
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile4, L"Curve");
-	AppendMenu(hFile4, MF_STRING, firstDegree, L"First Degree");
-	AppendMenu(hFile4, MF_STRING, secondDegree, L"Second Degree");
+	AppendMenu(hFile4, MF_STRING, firstDegreeCurve, L"First Degree");
+	AppendMenu(hFile4, MF_STRING, secondDegreeCurve, L"Second Degree");
 	AppendMenu(hFile4, MF_STRING, hermite, L"Hermite");
 	AppendMenu(hFile4, MF_STRING, bezier, L"Bezier");
 	AppendMenu(hFile4, MF_STRING, spline, L"Spline");
@@ -120,8 +118,7 @@ HMENU createMenuBar()
 	return hMenuBar;
 }
 
-LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
-{
+LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 	HDC hdc; //handle of device context
 	static int ch = -1;
 	static double x1, y1, s1x, s1y, x2, y2, s2x, s2y;
@@ -156,18 +153,16 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			x1 = LOWORD(lp);
 			y1 = HIWORD(lp);
 
-			if (ch == clipPointRectangle)
-			{
+			switch (ch) {
+			case clipPointRectangle: {
 				RectangleClipper rectangleClipper(hdc);
 				rectangleClipper.clipPoint(hdc, Point(x1, y1));
-			}
-			else if (ch == clipPointCircle)
-			{
+			}break;
+			case clipPointCircle: {
 				CircleClipper circleClipper(hdc);
 				circleClipper.clipPoint(hdc, Point(x1, y1));
-			}
-			else
-			{
+			}break;
+			default: // no drawing yet, continue receiving clicks from user
 				isFirstPress = 0;
 				goto continueTakingInput1;
 			}
@@ -182,68 +177,56 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			x2 = LOWORD(lp);
 			y2 = HIWORD(lp);
 
-			if (ch == ddaLine)
-			{
+			switch (ch) {
+			case ddaLine: {
 				LineDrawer *lineDrawer = new DDALineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
-			}
-			else if (ch == parametricLine)
-			{
+			}break;
+			case parametricLine: {
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
-			}
-			else if (ch == bresenhamLine)
-			{
+			}break;
+			case bresenhamLine: {
 				LineDrawer *lineDrawer = new BresenhamLineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
-			}
-			else if (ch == cartesianCircle)
-			{
+			}break;
+			case cartesianCircle: {
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
-			}
-			else if (ch == basicPolarCircle)
-			{
+			}break;
+			case basicPolarCircle: {
 				CircleDrawer *circleDrawer = new BasicPolarCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
-			}
-			else if (ch == improvedPolarCircle)
-			{
+			}break;
+			case improvedPolarCircle: {
 				CircleDrawer *circleDrawer = new ImprovedPolarCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
-			}
-			else if (ch == bresenhamCircle)
-			{
+			}break;
+			case bresenhamCircle: {
 				CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
-			}
-			else if (ch == firstDegree)
-			{
+			}break;
+			case firstDegreeCurve: {
 				CurveDrawer *curveDrawer = new FirstDegreeCurveDrawer();
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), {});
-			}
-			else if (ch == circleFilling)
-			{
+			}break;
+			case circleFilling: {
 				ConvexFiller convexFiller;
 				convexFiller.fillCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
-			}
-			else if (ch == ellipse)
-			{
+			}break;
+			case ellipse: {
 				EllipseDrawer ellipseDrawer;
 				ellipseDrawer.drawEllipse(hdc, Point(x1, y1), 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
-			}
-			else if (ch == clipLineRectangle)
-			{
+			}break;
+			case clipLineRectangle: {
 				RectangleClipper rectangleClipper(hdc);
 				rectangleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
-			}
-			else if (ch == clipLineCircle)
-			{
+			}break;
+			case clipLineCircle: {
 				CircleClipper circleClipper(hdc);
 				circleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
-			}
-			else
-			{
+			}break;
+			default: // no drawing yet, continue receiving clicks from user
 				isSecondPress = 0;
 				goto continueTakingInput2;
 			}
@@ -258,14 +241,13 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			s1x = LOWORD(lp);
 			s1y = HIWORD(lp);
 
-			if (ch == secondDegree)
-			{
+			switch (ch) {
+			case secondDegreeCurve: {
 				CurveDrawer *curveDrawer = new SecondDegreeCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
-			}
-			else
-			{
+			}break;
+			default: // no drawing yet, continue receiving clicks from user
 				isThirdPress = 0;
 				goto continueTakingInput3;
 			}
@@ -281,29 +263,27 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			s2x = LOWORD(lp);
 			s2y = HIWORD(lp);
 
-			if (ch == hermite)
-			{
+			switch (ch) {
+			case hermite: {
 				CurveDrawer *curveDrawer = new HermiteCurveDrawer();
-				Point slopes[] = {Point(s1x, s1y), Point(s2x, s2y)};
+				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
-			}
-			else if (ch == bezier)
-			{
+			}break;
+			case bezier: {
 				CurveDrawer *curveDrawer = new BezierCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
-			}
-			else if (ch == spline)
-			{
+			}break;
+			case spline: {
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				HermiteCurveDrawer hermiteCurveDrawer;
 				hermiteCurveDrawer.drawSpline(hdc, points, 4, 0.06);
-			}
-			else if (ch == convexFilling)
-			{
+			}break;
+			case convexFilling: {
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				ConvexFiller convexFiller;
 				convexFiller.convexFill(hdc, points, 4);
+			}
 			}
 
 			ReleaseDC(hWnd, hdc);
@@ -312,7 +292,6 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 			isThirdPress = 1;
 		}
 	}break;
-
 	case WM_DESTROY: {
 		PostQuitMessage(0);
 	}break;
@@ -339,8 +318,7 @@ WNDCLASSEX prepareWindowClass(HINSTANCE hInst)
 	return wndClassEx;
 }
 
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winFormat)
-{
+int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winFormat) {
 	HWND hWnd;
 
 	WNDCLASSEX wndClassEx = prepareWindowClass(hInst);
