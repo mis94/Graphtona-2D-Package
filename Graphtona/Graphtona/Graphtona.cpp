@@ -24,14 +24,19 @@ enum Color {
 void changeBackgroundColor(HWND hWnd, Color newColor)
 {
 	HBRUSH hbrush;
-	if (newColor == black)
+	switch (newColor) {
+	case black: {
 		hbrush = CreateSolidBrush(RGB(0, 0, 0));
-	else if (newColor == red)
+	}break;
+	case red: {
 		hbrush = CreateSolidBrush(RGB(255, 0, 0));
-	else if (newColor == white)
+	}break;
+	case white: {
 		hbrush = CreateSolidBrush(RGB(255, 255, 255));
-	else
+	}break;
+	default: // gray color
 		hbrush = CreateSolidBrush(RGB(128, 128, 128));
+	}	
 
 	HBRUSH holdBrush = (HBRUSH)SetClassLongPtr(hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)hbrush);
 	DeleteObject(holdBrush);
