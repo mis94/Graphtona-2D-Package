@@ -134,56 +134,19 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp)
 	}break;
 	case WM_COMMAND:
 	{
-		if (LOWORD(wp) == changeToColor1)
-			changeBackgroundColor(hWnd, black);
-		else if (LOWORD(wp) == changeToColor2)
-			changeBackgroundColor(hWnd, red);
-		else if (LOWORD(wp) == changeToColor3)
-			changeBackgroundColor(hWnd, white);
-		else if (LOWORD(wp) == changeToColor4)
-			changeBackgroundColor(hWnd, gray);
-		else if (LOWORD(wp) == ddaLine)
-			ch = ddaLine;
-		else if (LOWORD(wp) == parametricLine)
-			ch = parametricLine;
-		else if (LOWORD(wp) == bresenhamLine)
-			ch = bresenhamLine;
-		else if (LOWORD(wp) == cartesianCircle)
-			ch = cartesianCircle;
-		else if (LOWORD(wp) == basicPolarCircle)
-			ch = basicPolarCircle;
-		else if (LOWORD(wp) == improvedPolarCircle)
-			ch = improvedPolarCircle;
-		else if (LOWORD(wp) == bresenhamCircle)
-			ch = bresenhamCircle;
-		else if (LOWORD(wp) == firstDegree)
-			ch = firstDegree;
-		else if (LOWORD(wp) == secondDegree)
-			ch = secondDegree;
-		else if (LOWORD(wp) == hermite)
-			ch = hermite;
-		else if (LOWORD(wp) == bezier)
-			ch = bezier;
-		else if (LOWORD(wp) == spline)
-			ch = spline;
-		else if (LOWORD(wp) == convexFilling)
-			ch = convexFilling;
-		else if (LOWORD(wp) == clipPointRectangle)
-			ch = clipPointRectangle;
-		else if (LOWORD(wp) == clipLineRectangle)
-			ch = clipLineRectangle;
-		else if (LOWORD(wp) == clipPointCircle)
-			ch = clipPointCircle;
-		else if (LOWORD(wp) == clipLineCircle)
-			ch = clipLineCircle;
-		else if (LOWORD(wp) == circleFilling)
-			ch = circleFilling;
-		else if (LOWORD(wp) == ellipse)
-			ch = ellipse;
-
-		isFirstPress = 1;
-		isSecondPress = 1;
-		isThirdPress = 1;
+		switch (LOWORD(wp)) {
+		case changeToColor1:
+		case changeToColor2:
+		case changeToColor3:
+		case changeToColor4:
+			changeBackgroundColor(hWnd, Color(LOWORD(wp)));
+			break;
+		default: // not a color change choice
+			ch = LOWORD(wp);
+			isFirstPress = 1;
+			isSecondPress = 1;
+			isThirdPress = 1;
+		}
 	}break;
 	case WM_LBUTTONDOWN: {
 		if (isFirstPress)
