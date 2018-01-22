@@ -15,22 +15,22 @@
 #include "Header Files\Clipping\CircleClipper.h"
 
 enum Color {
-	black,
-	red,
-	white,
-	gray
+	BLACK,
+	RED,
+	WHITE,
+	GRAY
 };
 
 void changeBackgroundColor(HWND hWnd, Color newColor) {
 	HBRUSH hbrush;
 	switch (newColor) {
-	case black:
+	case BLACK:
 		hbrush = CreateSolidBrush(RGB(0, 0, 0));
 		break;
-	case red:
+	case RED:
 		hbrush = CreateSolidBrush(RGB(255, 0, 0));
 		break;
-	case white:
+	case WHITE:
 		hbrush = CreateSolidBrush(RGB(255, 255, 255));
 		break;
 	default: // gray color
@@ -43,29 +43,29 @@ void changeBackgroundColor(HWND hWnd, Color newColor) {
 }
 
 enum Option {
-	changeToColor1,
-	changeToColor2,
-	changeToColor3,
-	changeToColor4,
-	ddaLine,
-	parametricLine,
-	bresenhamLine,
-	cartesianCircle,
-	basicPolarCircle,
-	improvedPolarCircle,
-	bresenhamCircle,
-	ellipse,
-	firstDegreeCurve,
-	secondDegreeCurve,
-	hermite,
-	bezier,
-	spline,
-	convexFilling,
-	circleFilling,
-	clipPointRectangle,
-	clipLineRectangle,
-	clipPointCircle,
-	clipLineCircle
+	CHANGE_TO_COLOR_1,
+	CHANGE_TO_COLOR_2,
+	CHANGE_TO_COLOR_3,
+	CHANGE_TO_COLOR_4,
+	LINE_DDA,
+	LINE_PARAMETRIC,
+	LINE_BRESENHAM,
+	CIRCLE_CARTESIAN,
+	CIRCLE_BASIC_POLAR,
+	CIRCLE_IMPROVED_POLAR,
+	CIRCLE_BRESENHAM,
+	ELLIPSE,
+	CURVE_FIRST_DEGREE,
+	CURVE_SECOND_DEGREE,
+	HERMITE,
+	BEZIER,
+	SPLINE,
+	CONVEX_FILLING,
+	CIRCLE_FILLING,
+	CLIP_POINT_RECTANGLE,
+	CLIP_LINE_RECTANGLE,
+	CLIP_POINT_CIRCLE,
+	CLIP_LINE_CIRCLE
 };
 
 HMENU createMenuBar() {
@@ -73,47 +73,47 @@ HMENU createMenuBar() {
 
 	HMENU hFile1 = CreateMenu(); // background color
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile1, L"Change Background color");
-	AppendMenu(hFile1, MF_STRING, changeToColor1, L"Black");
-	AppendMenu(hFile1, MF_STRING, changeToColor2, L"Red");
-	AppendMenu(hFile1, MF_STRING, changeToColor3, L"White");
-	AppendMenu(hFile1, MF_STRING, changeToColor4, L"Gray");
+	AppendMenu(hFile1, MF_STRING, CHANGE_TO_COLOR_1, L"Black");
+	AppendMenu(hFile1, MF_STRING, CHANGE_TO_COLOR_2, L"Red");
+	AppendMenu(hFile1, MF_STRING, CHANGE_TO_COLOR_3, L"White");
+	AppendMenu(hFile1, MF_STRING, CHANGE_TO_COLOR_4, L"Gray");
 
 	HMENU hFile2 = CreateMenu(); // line
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile2, L"Line");
-	AppendMenu(hFile2, MF_STRING, ddaLine, L"Simple Line DDA");
-	AppendMenu(hFile2, MF_STRING, parametricLine, L"Parametric line");
-	AppendMenu(hFile2, MF_STRING, bresenhamLine, L"Bresenham midpoint algorithm");
+	AppendMenu(hFile2, MF_STRING, LINE_DDA, L"Simple Line DDA");
+	AppendMenu(hFile2, MF_STRING, LINE_PARAMETRIC, L"Parametric line");
+	AppendMenu(hFile2, MF_STRING, LINE_BRESENHAM, L"Bresenham midpoint algorithm");
 
 	HMENU hFile3 = CreateMenu(); // circle
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile3, L"Circle");
-	AppendMenu(hFile3, MF_STRING, cartesianCircle, L"Direct Cartesian method");
-	AppendMenu(hFile3, MF_STRING, basicPolarCircle, L"Polar direct method");
-	AppendMenu(hFile3, MF_STRING, improvedPolarCircle, L"Iterative polar algorithm");
-	AppendMenu(hFile3, MF_STRING, bresenhamCircle, L"Bresenham midpoint algorithm");
+	AppendMenu(hFile3, MF_STRING, CIRCLE_CARTESIAN, L"Direct Cartesian method");
+	AppendMenu(hFile3, MF_STRING, CIRCLE_BASIC_POLAR, L"Polar direct method");
+	AppendMenu(hFile3, MF_STRING, CIRCLE_IMPROVED_POLAR, L"Iterative polar algorithm");
+	AppendMenu(hFile3, MF_STRING, CIRCLE_BRESENHAM, L"Bresenham midpoint algorithm");
 
 	HMENU hFile7 = CreateMenu(); // ellipse
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile7, L"Ellipse");
-	AppendMenu(hFile7, MF_STRING, ellipse, L"Ellipse Drawing");
+	AppendMenu(hFile7, MF_STRING, ELLIPSE, L"Ellipse Drawing");
 
 	HMENU hFile4 = CreateMenu(); // curve
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile4, L"Curve");
-	AppendMenu(hFile4, MF_STRING, firstDegreeCurve, L"First Degree");
-	AppendMenu(hFile4, MF_STRING, secondDegreeCurve, L"Second Degree");
-	AppendMenu(hFile4, MF_STRING, hermite, L"Hermite");
-	AppendMenu(hFile4, MF_STRING, bezier, L"Bezier");
-	AppendMenu(hFile4, MF_STRING, spline, L"Spline");
+	AppendMenu(hFile4, MF_STRING, CURVE_FIRST_DEGREE, L"First Degree");
+	AppendMenu(hFile4, MF_STRING, CURVE_SECOND_DEGREE, L"Second Degree");
+	AppendMenu(hFile4, MF_STRING, HERMITE, L"Hermite");
+	AppendMenu(hFile4, MF_STRING, BEZIER, L"Bezier");
+	AppendMenu(hFile4, MF_STRING, SPLINE, L"Spline");
 
 	HMENU hFile5 = CreateMenu(); // convex filling
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile5, L"Filling");
-	AppendMenu(hFile5, MF_STRING, convexFilling, L"Convex filling");
-	AppendMenu(hFile5, MF_STRING, circleFilling, L"Circle filling");
+	AppendMenu(hFile5, MF_STRING, CONVEX_FILLING, L"Convex filling");
+	AppendMenu(hFile5, MF_STRING, CIRCLE_FILLING, L"Circle filling");
 
 	HMENU hFile6 = CreateMenu(); // clipping
 	AppendMenu(hMenuBar, MF_POPUP, (UINT_PTR)hFile6, L"Clipping");
-	AppendMenu(hFile6, MF_STRING, clipPointRectangle, L"Point according to rectangle");
-	AppendMenu(hFile6, MF_STRING, clipLineRectangle, L"Line according to rectangle");
-	AppendMenu(hFile6, MF_STRING, clipPointCircle, L"Point according to circle");
-	AppendMenu(hFile6, MF_STRING, clipLineCircle, L"Line according to circle");
+	AppendMenu(hFile6, MF_STRING, CLIP_POINT_RECTANGLE, L"Point according to rectangle");
+	AppendMenu(hFile6, MF_STRING, CLIP_LINE_RECTANGLE, L"Line according to rectangle");
+	AppendMenu(hFile6, MF_STRING, CLIP_POINT_CIRCLE, L"Point according to circle");
+	AppendMenu(hFile6, MF_STRING, CLIP_LINE_CIRCLE, L"Line according to circle");
 
 	return hMenuBar;
 }
@@ -129,13 +129,12 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 		HMENU hMenubar = createMenuBar();
 		SetMenu(hWnd, hMenubar);
 	}break;
-	case WM_COMMAND:
-	{
+	case WM_COMMAND: {
 		switch (LOWORD(wp)) {
-		case changeToColor1:
-		case changeToColor2:
-		case changeToColor3:
-		case changeToColor4:
+		case CHANGE_TO_COLOR_1:
+		case CHANGE_TO_COLOR_2:
+		case CHANGE_TO_COLOR_3:
+		case CHANGE_TO_COLOR_4:
 			changeBackgroundColor(hWnd, Color(LOWORD(wp)));
 			break;
 		default: // not a color change choice
@@ -146,19 +145,18 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 		}
 	}break;
 	case WM_LBUTTONDOWN: {
-		if (isFirstPress)
-		{
+		if (isFirstPress) {
 			hdc = GetDC(hWnd);
 
 			x1 = LOWORD(lp);
 			y1 = HIWORD(lp);
 
 			switch (ch) {
-			case clipPointRectangle: {
+			case CLIP_POINT_RECTANGLE: {
 				RectangleClipper rectangleClipper(hdc);
 				rectangleClipper.clipPoint(hdc, Point(x1, y1));
 			}break;
-			case clipPointCircle: {
+			case CLIP_POINT_CIRCLE: {
 				CircleClipper circleClipper(hdc);
 				circleClipper.clipPoint(hdc, Point(x1, y1));
 			}break;
@@ -170,59 +168,58 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 			ReleaseDC(hWnd, hdc);
 			isFirstPress = 1;continueTakingInput1:;
 		}
-		else if (isSecondPress)
-		{
+		else if (isSecondPress) {
 			hdc = GetDC(hWnd);
 
 			x2 = LOWORD(lp);
 			y2 = HIWORD(lp);
 
 			switch (ch) {
-			case ddaLine: {
+			case LINE_DDA: {
 				LineDrawer *lineDrawer = new DDALineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}break;
-			case parametricLine: {
+			case LINE_PARAMETRIC: {
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}break;
-			case bresenhamLine: {
+			case LINE_BRESENHAM: {
 				LineDrawer *lineDrawer = new BresenhamLineDrawer();
 				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
 			}break;
-			case cartesianCircle: {
+			case CIRCLE_CARTESIAN: {
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
-			case basicPolarCircle: {
+			case CIRCLE_BASIC_POLAR: {
 				CircleDrawer *circleDrawer = new BasicPolarCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
-			case improvedPolarCircle: {
+			case CIRCLE_IMPROVED_POLAR: {
 				CircleDrawer *circleDrawer = new ImprovedPolarCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
-			case bresenhamCircle: {
+			case CIRCLE_BRESENHAM: {
 				CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
 				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
-			case firstDegreeCurve: {
+			case CURVE_FIRST_DEGREE: {
 				CurveDrawer *curveDrawer = new FirstDegreeCurveDrawer();
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), {});
 			}break;
-			case circleFilling: {
+			case CIRCLE_FILLING: {
 				ConvexFiller convexFiller;
 				convexFiller.fillCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
-			case ellipse: {
+			case ELLIPSE: {
 				EllipseDrawer ellipseDrawer;
 				ellipseDrawer.drawEllipse(hdc, Point(x1, y1), 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
-			case clipLineRectangle: {
+			case CLIP_LINE_RECTANGLE: {
 				RectangleClipper rectangleClipper(hdc);
 				rectangleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
 			}break;
-			case clipLineCircle: {
+			case CLIP_LINE_CIRCLE: {
 				CircleClipper circleClipper(hdc);
 				circleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
 			}break;
@@ -234,15 +231,14 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 			ReleaseDC(hWnd, hdc);
 			isFirstPress = 1;continueTakingInput2:;
 		}
-		else if (isThirdPress)
-		{
+		else if (isThirdPress) {
 			hdc = GetDC(hWnd);
 
 			s1x = LOWORD(lp);
 			s1y = HIWORD(lp);
 
 			switch (ch) {
-			case secondDegreeCurve: {
+			case CURVE_SECOND_DEGREE: {
 				CurveDrawer *curveDrawer = new SecondDegreeCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
@@ -256,30 +252,29 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 			isFirstPress = 1;
 			isSecondPress = 1;continueTakingInput3:;
 		}
-		else
-		{
+		else {
 			hdc = GetDC(hWnd);
 
 			s2x = LOWORD(lp);
 			s2y = HIWORD(lp);
 
 			switch (ch) {
-			case hermite: {
+			case HERMITE: {
 				CurveDrawer *curveDrawer = new HermiteCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}break;
-			case bezier: {
+			case BEZIER: {
 				CurveDrawer *curveDrawer = new BezierCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
 				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
 			}break;
-			case spline: {
+			case SPLINE: {
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				HermiteCurveDrawer hermiteCurveDrawer;
 				hermiteCurveDrawer.drawSpline(hdc, points, 4, 0.06);
 			}break;
-			case convexFilling: {
+			case CONVEX_FILLING: {
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				ConvexFiller convexFiller;
 				convexFiller.convexFill(hdc, points, 4);
@@ -328,8 +323,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpstr, int winF
 	UpdateWindow(hWnd);
 
 	MSG msg;
-	while (GetMessage(&msg, NULL, 0, 0) > 0)
-	{
+	while (GetMessage(&msg, NULL, 0, 0) > 0) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
