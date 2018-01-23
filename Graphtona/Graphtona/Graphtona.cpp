@@ -13,34 +13,10 @@
 #include "Header Files\Filling\ConvexFiller.h"
 #include "Header Files\Clipping\RectangleClipper.h"
 #include "Header Files\Clipping\CircleClipper.h"
-
-enum Color {
-	BLACK,
-	RED,
-	WHITE,
-	GRAY
-};
-
-void changeBackgroundColor(HWND hWnd, Color newColor) {
-	HBRUSH hbrush;
-	switch (newColor) {
-	case BLACK:
-		hbrush = CreateSolidBrush(RGB(0, 0, 0));
-		break;
-	case RED:
-		hbrush = CreateSolidBrush(RGB(255, 0, 0));
-		break;
-	case WHITE:
-		hbrush = CreateSolidBrush(RGB(255, 255, 255));
-		break;
-	default: // gray color
-		hbrush = CreateSolidBrush(RGB(128, 128, 128));
-	}	
-
-	HBRUSH holdBrush = (HBRUSH)SetClassLongPtr(hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)hbrush);
-	DeleteObject(holdBrush);
-	InvalidateRect(hWnd, NULL, TRUE);
-}
+#include "Header Files\Color\BlackColorChanger.h"
+#include "Header Files\Color\RedColorChanger.h"
+#include "Header Files\Color\WhiteColorChanger.h"
+#include "Header Files\Color\GrayColorChanger.h"
 
 enum Option {
 	CHANGE_TO_COLOR_1,
@@ -130,12 +106,22 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 	}break;
 	case WM_COMMAND: {
 		switch (LOWORD(wp)) {
-		case CHANGE_TO_COLOR_1:
-		case CHANGE_TO_COLOR_2:
-		case CHANGE_TO_COLOR_3:
-		case CHANGE_TO_COLOR_4:
-			changeBackgroundColor(hWnd, Color(LOWORD(wp)));
-			break;
+		case CHANGE_TO_COLOR_1: {
+			ColorChanger* colorChanger = new BlackColorChanger();
+			colorChanger->colorize(hWnd);
+		}break;
+		case CHANGE_TO_COLOR_2: {
+			ColorChanger* colorChanger = new RedColorChanger();
+			colorChanger->colorize(hWnd);
+		}break;
+		case CHANGE_TO_COLOR_3: {
+			ColorChanger* colorChanger = new WhiteColorChanger();
+			colorChanger->colorize(hWnd);
+		}break;
+		case CHANGE_TO_COLOR_4: {
+			ColorChanger* colorChanger = new GrayColorChanger();
+			colorChanger->colorize(hWnd);
+		}break;
 		default: // not a color change choice
 			userChoice = LOWORD(wp);
 			isFirstPress = 1;
@@ -163,8 +149,6 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 				isFirstPress = 0;
 				goto continueTakingInput1;
 			}
-
-			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;continueTakingInput1:;
 		}
 		else if (isSecondPress) {
@@ -226,8 +210,6 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 				isSecondPress = 0;
 				goto continueTakingInput2;
 			}
-
-			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;continueTakingInput2:;
 		}
 		else if (isThirdPress) {
@@ -246,8 +228,6 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 				isThirdPress = 0;
 				goto continueTakingInput3;
 			}
-
-			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;
 			isSecondPress = 1;continueTakingInput3:;
 		}
@@ -279,8 +259,6 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 				convexFiller.convexFill(points, 4);
 			}
 			}
-
-			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;
 			isSecondPress = 1;
 			isThirdPress = 1;
@@ -292,6 +270,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 	default:
 		return DefWindowProc(hWnd, mcode, wp, lp);
 	}
+	ReleaseDC(hWnd, Algorithm::hdc);
 }
 
 WNDCLASSEX prepareWindowClass(HINSTANCE hInst) {

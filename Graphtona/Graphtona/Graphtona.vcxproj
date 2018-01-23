@@ -152,6 +152,11 @@
     <ClInclude Include="Header Files\Clipping\CircleClipper.h" />
     <ClInclude Include="Header Files\Clipping\Clipper.h" />
     <ClInclude Include="Header Files\Clipping\RectangleClipper.h" />
+    <ClInclude Include="Header Files\Color\BlackColorChanger.h" />
+    <ClInclude Include="Header Files\Color\ColorChanger.h" />
+    <ClInclude Include="Header Files\Color\GrayColorChanger.h" />
+    <ClInclude Include="Header Files\Color\RedColorChanger.h" />
+    <ClInclude Include="Header Files\Color\WhiteColorChanger.h" />
     <ClInclude Include="Header Files\Curve\BezierCurveDrawer.h" />
     <ClInclude Include="Header Files\Curve\CurveDrawer.h" />
     <ClInclude Include="Header Files\Curve\FirstDegreeCurveDrawer.h" />
@@ -189,6 +194,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Clipping\RectangleClipper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Color\BlackColorChanger.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Color\GrayColorChanger.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Color\RedColorChanger.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source Files\Color\WhiteColorChanger.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source Files\Curve\BezierCurveDrawer.cpp">
