@@ -21,9 +21,9 @@ private:
 	void verticalIntersect(Point startPoint, Point endPoint, int x, double *xi, double *yi);
 	OutCode getOutCode(Point point);
 public:
-	RectangleClipper(HDC hdc);
-	RectangleClipper(HDC hdc, int yTop, int yBottom, int xLeft, int xRight);
-	void drawClippingShape(HDC hdc);
-	void clipPoint(HDC hdc, Point point);
-	void clipLine(HDC hdc, Point startPoint, Point endPoint);
+	RectangleClipper();
+	RectangleClipper(int yTop, int yBottom, int xLeft, int xRight);
+	void drawClippingShape();
+	void clipPoint(Point point);
+	void clipLine(Point startPoint, Point endPoint);
 };

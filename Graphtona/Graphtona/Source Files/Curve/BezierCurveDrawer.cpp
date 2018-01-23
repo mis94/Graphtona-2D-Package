@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Curve\BezierCurveDrawer.h"
 
-void BezierCurveDrawer::drawCurve(HDC hdc, Point startPoint, Point endPoint, Point slopes[])
+void BezierCurveDrawer::drawCurve(Point startPoint, Point endPoint, Point slopes[])
 {
 	int bezierMatrix[4][4] = { { -1, 3, -3, 1 },{ 3, -6, 3, 0 },{ -3, 3, 0, 0 },{ 1, 0, 0, 0 } };
 	int inputX[4] = { startPoint.x, slopes[0].x, endPoint.x, slopes[1].x };

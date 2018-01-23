@@ -1,33 +1,33 @@
 #include "..\..\Header Files\Clipping\RectangleClipper.h"
 
-RectangleClipper::RectangleClipper(HDC hdc)
+RectangleClipper::RectangleClipper()
 {
 	yTop = 60;
 	yBottom = 500;
 	xLeft = 60;
 	xRight = 500;
-	drawClippingShape(hdc);
+	drawClippingShape();
 }
 
-RectangleClipper::RectangleClipper(HDC hdc, int yTop, int yBottom, int xLeft, int xRight)
+RectangleClipper::RectangleClipper(int yTop, int yBottom, int xLeft, int xRight)
 {
 	RectangleClipper::yTop = yTop;
 	RectangleClipper::yBottom = yBottom;
 	RectangleClipper::xLeft = xLeft;
 	RectangleClipper::xRight = xRight;
-	drawClippingShape(hdc);
+	drawClippingShape();
 }
 
-void RectangleClipper::drawClippingShape(HDC hdc)
+void RectangleClipper::drawClippingShape()
 {
 	LineDrawer *lineDrawer = new BresenhamLineDrawer();
-	lineDrawer->drawLine(hdc, Point(xLeft, yTop), Point(xRight, yTop));
-	lineDrawer->drawLine(hdc, Point(xLeft, yBottom), Point(xRight, yBottom));
-	lineDrawer->drawLine(hdc, Point(xLeft, yTop), Point(xLeft, yBottom));
-	lineDrawer->drawLine(hdc, Point(xRight, yTop), Point(xRight, yBottom));
+	lineDrawer->drawLine(Point(xLeft, yTop), Point(xRight, yTop));
+	lineDrawer->drawLine(Point(xLeft, yBottom), Point(xRight, yBottom));
+	lineDrawer->drawLine(Point(xLeft, yTop), Point(xLeft, yBottom));
+	lineDrawer->drawLine(Point(xRight, yTop), Point(xRight, yBottom));
 }
 
-void RectangleClipper::clipPoint(HDC hdc, Point point)
+void RectangleClipper::clipPoint(Point point)
 {
 	if (point.x <= xRight&&point.x >= xLeft)
 	{
@@ -66,7 +66,7 @@ OutCode RectangleClipper::getOutCode(Point point)
 	return out;
 }
 
-void RectangleClipper::clipLine(HDC hdc, Point startPoint, Point endPoint)
+void RectangleClipper::clipLine(Point startPoint, Point endPoint)
 {
 	//double x1 = startPoint.x, x2 = endPoint.x, y1 = startPoint.y, y2 = endPoint.y;
 	OutCode out1 = getOutCode(startPoint);
@@ -106,6 +106,6 @@ void RectangleClipper::clipLine(HDC hdc, Point startPoint, Point endPoint)
 	}
 	LineDrawer *lineDrawer = new BresenhamLineDrawer();
 	if (!out1.All && !out2.All)
-		lineDrawer->drawLine(hdc, startPoint, endPoint);
+		lineDrawer->drawLine(startPoint, endPoint);
 }
 

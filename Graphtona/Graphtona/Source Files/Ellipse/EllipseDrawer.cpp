@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Ellipse\EllipseDrawer.h"
 
-void EllipseDrawer::drawEllipse(HDC hdc, Point center, int width, int height)
+void EllipseDrawer::drawEllipse(Point center, int width, int height)
 {
 	int a2 = width * width;
 	int b2 = height * height;

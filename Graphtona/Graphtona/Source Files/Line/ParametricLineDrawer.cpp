@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Line\ParametricLineDrawer.h"
 
-void ParametricLineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
+void ParametricLineDrawer::drawLine(Point startPoint, Point endPoint)
 {
 	int numberOfPoints = max(abs(startPoint.x - endPoint.x), abs(startPoint.y - endPoint.y));
 	double dt = 1.0 / numberOfPoints;

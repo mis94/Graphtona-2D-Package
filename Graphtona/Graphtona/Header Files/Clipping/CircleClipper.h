@@ -8,9 +8,9 @@ private:
 	Point center;
 	int radius;
 public:
-	CircleClipper(HDC hdc);
-	CircleClipper(HDC hdc, Point center, int radius);
-	void drawClippingShape(HDC hdc);
-	void clipPoint(HDC hdc, Point point);
-	void clipLine(HDC hdc, Point startPoint, Point endPoint);
+	CircleClipper();
+	CircleClipper(Point center, int radius);
+	void drawClippingShape();
+	void clipPoint(Point point);
+	void clipLine(Point startPoint, Point endPoint);
 };

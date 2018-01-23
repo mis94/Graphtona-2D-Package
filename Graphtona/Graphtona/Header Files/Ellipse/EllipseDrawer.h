@@ -4,5 +4,5 @@
 class EllipseDrawer : public Algorithm
 {
 public:
-	void drawEllipse(HDC hdc, Point center, int width, int height);
+	void drawEllipse(Point center, int width, int height);
 };

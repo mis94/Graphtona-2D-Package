@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Filling\ConvexFiller.h"
 
-void ConvexFiller::convexFill(HDC hdc, Point* points, int numberOfPoints)
+void ConvexFiller::convexFill(Point* points, int numberOfPoints)
 {
 	EdgeRecord *table = new EdgeRecord[800];
 	Point v1 = points[numberOfPoints - 1];
@@ -30,13 +30,13 @@ void ConvexFiller::convexFill(HDC hdc, Point* points, int numberOfPoints)
 	for (int i = 0;i < 800;i++)
 	{
 		if (table[i].xLeft < table[i].xRight)
-			lineDrawer->drawLine(hdc, Point(table[i].xLeft, i), Point(table[i].xRight, i));
+			lineDrawer->drawLine(Point(table[i].xLeft, i), Point(table[i].xRight, i));
 	}
 }
 
-void ConvexFiller::fillCircle(HDC hdc, Point center, int radius)
+void ConvexFiller::fillCircle(Point center, int radius)
 {
 	CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
 	for (int i = radius;i >= 0;i--)
-		circleDrawer->drawCircle(hdc, center, i);
+		circleDrawer->drawCircle(center, i);
 }

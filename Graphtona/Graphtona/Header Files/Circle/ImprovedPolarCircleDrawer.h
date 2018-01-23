@@ -4,5 +4,5 @@
 class ImprovedPolarCircleDrawer : public CircleDrawer
 {
 public:
-	void drawCircle(HDC hdc, Point center, int radius);
+	void drawCircle(Point center, int radius);
 };

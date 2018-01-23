@@ -1,35 +1,35 @@
 #include "..\..\Header Files\Clipping\CircleClipper.h"
 
-CircleClipper::CircleClipper(HDC hdc)
+CircleClipper::CircleClipper()
 {
 	center.x = 450;
 	center.y = 250;
 	radius = 150;
-	drawClippingShape(hdc);
+	drawClippingShape();
 }
 
-CircleClipper::CircleClipper(HDC hdc, Point center, int radius)
+CircleClipper::CircleClipper(Point center, int radius)
 {
 	CircleClipper::center.x = center.x;
 	CircleClipper::center.y = center.y;
 	CircleClipper::radius = radius;
-	drawClippingShape(hdc);
+	drawClippingShape();
 }
 
-void CircleClipper::drawClippingShape(HDC hdc)
+void CircleClipper::drawClippingShape()
 {
 	CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
-	circleDrawer->drawCircle(hdc, center, radius);
+	circleDrawer->drawCircle(center, radius);
 }
 
-void CircleClipper::clipPoint(HDC hdc, Point point)
+void CircleClipper::clipPoint(Point point)
 {
 	int distance = sqrt((point.x - center.x)*(point.x - center.x) + (point.y - center.y)*(point.y - center.y));
 	if (distance <= radius)
 		SetPixel(hdc, point.x, point.y, RGB(0, 0, 0));
 }
 
-void CircleClipper::clipLine(HDC hdc, Point startPoint, Point endPoint)
+void CircleClipper::clipLine(Point startPoint, Point endPoint)
 {
 	int dx = endPoint.x - startPoint.x, dy = endPoint.y - startPoint.y, steps, k;
 	float xIncrement, yIncrement, x = startPoint.x, y = startPoint.y;

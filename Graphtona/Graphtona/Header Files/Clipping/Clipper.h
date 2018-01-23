@@ -4,5 +4,5 @@
 class Clipper : public Algorithm
 {
 public:
-	virtual void drawClippingShape(HDC hdc) = 0;
+	virtual void drawClippingShape() = 0;
 };

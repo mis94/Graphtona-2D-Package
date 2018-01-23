@@ -4,5 +4,5 @@
 class SecondDegreeCurveDrawer : public CurveDrawer
 {
 public:
-	void drawCurve(HDC hdc, Point startPoint, Point endPoint, Point slopes[]);
+	void drawCurve(Point startPoint, Point endPoint, Point slopes[]);
 };

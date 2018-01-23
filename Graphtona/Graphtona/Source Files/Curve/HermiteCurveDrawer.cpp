@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Curve\HermiteCurveDrawer.h"
 
-void HermiteCurveDrawer::drawCurve(HDC hdc, Point startPoint, Point endPoint, Point slopes[])
+void HermiteCurveDrawer::drawCurve(Point startPoint, Point endPoint, Point slopes[])
 {
 	int hermiteMatrix[4][4] = { { 2, 1, -2, 1 },{ -3, -2, 3, -1 },{ 0, 1, 0, 0 },{ 1, 0, 0, 0 } };
 	int inputX[4] = { startPoint.x, slopes[0].x, endPoint.x, slopes[1].x };
@@ -25,7 +25,7 @@ void HermiteCurveDrawer::drawCurve(HDC hdc, Point startPoint, Point endPoint, Po
 	}
 }
 
-void HermiteCurveDrawer::drawSpline(HDC hdc, Point points[], int numberOfPoints, double c) // c is the tension of the curve (0---1)
+void HermiteCurveDrawer::drawSpline(Point points[], int numberOfPoints, double c) // c is the tension of the curve (0---1)
 {
 	double s1x = (1 - c)*(points[2].x - points[0].x); // slope at Pi
 	double s1y = (1 - c)*(points[2].y - points[0].y);
@@ -37,7 +37,7 @@ void HermiteCurveDrawer::drawSpline(HDC hdc, Point points[], int numberOfPoints,
 
 		Point slopes[2] = {Point(s1x, s1y), Point(s2x, s2y)};
 
-		drawCurve(hdc, Point(points[i - 1].x, points[i - 1].y), Point(points[i].x, points[i].y), slopes);
+		drawCurve(Point(points[i - 1].x, points[i - 1].y), Point(points[i].x, points[i].y), slopes);
 
 		s1x = s2x;
 		s1y = s2y;

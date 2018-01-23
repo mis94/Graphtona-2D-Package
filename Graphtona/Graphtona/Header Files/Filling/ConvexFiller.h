@@ -7,6 +7,6 @@
 class ConvexFiller : public Algorithm
 {
 public:
-	void convexFill(HDC hdc, Point* points, int numberOfPoints);
-	void fillCircle(HDC hdc, Point center, int radius);
+	void convexFill(Point* points, int numberOfPoints);
+	void fillCircle(Point center, int radius);
 };

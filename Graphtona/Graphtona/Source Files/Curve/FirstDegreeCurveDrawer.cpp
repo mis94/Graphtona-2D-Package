@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Curve\FirstDegreeCurveDrawer.h"
 
-void FirstDegreeCurveDrawer::drawCurve(HDC hdc, Point startPoint, Point endPoint, Point slopes[])
+void FirstDegreeCurveDrawer::drawCurve(Point startPoint, Point endPoint, Point slopes[])
 {
 	double beta1 = startPoint.x;
 	double beta2 = startPoint.y;

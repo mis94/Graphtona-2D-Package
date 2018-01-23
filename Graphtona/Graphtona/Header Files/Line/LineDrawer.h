@@ -4,5 +4,5 @@
 class LineDrawer : public Algorithm
 {
 public:
-	virtual void drawLine(HDC hdc, Point startPoint, Point endPoint) = 0;
+	virtual void drawLine(Point startPoint, Point endPoint) = 0;
 };

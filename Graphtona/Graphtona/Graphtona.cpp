@@ -119,8 +119,7 @@ HMENU createMenuBar() {
 }
 
 LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
-	HDC hdc; //handle of device context
-	static int ch = -1;
+	static int userChoice = -1;
 	static double x1, y1, s1x, s1y, x2, y2, s2x, s2y;
 	static bool isFirstPress = 1, isSecondPress = 1, isThirdPress = 1;
 
@@ -138,7 +137,7 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 			changeBackgroundColor(hWnd, Color(LOWORD(wp)));
 			break;
 		default: // not a color change choice
-			ch = LOWORD(wp);
+			userChoice = LOWORD(wp);
 			isFirstPress = 1;
 			isSecondPress = 1;
 			isThirdPress = 1;
@@ -146,142 +145,142 @@ LPARAM WINAPI MyWindowProcedure(HWND hWnd, UINT mcode, WPARAM wp, LPARAM lp) {
 	}break;
 	case WM_LBUTTONDOWN: {
 		if (isFirstPress) {
-			hdc = GetDC(hWnd);
+			Algorithm::hdc = GetDC(hWnd); // handle of device context
 
 			x1 = LOWORD(lp);
 			y1 = HIWORD(lp);
 
-			switch (ch) {
+			switch (userChoice) {
 			case CLIP_POINT_RECTANGLE: {
-				RectangleClipper rectangleClipper(hdc);
-				rectangleClipper.clipPoint(hdc, Point(x1, y1));
+				RectangleClipper rectangleClipper;
+				rectangleClipper.clipPoint(Point(x1, y1));
 			}break;
 			case CLIP_POINT_CIRCLE: {
-				CircleClipper circleClipper(hdc);
-				circleClipper.clipPoint(hdc, Point(x1, y1));
+				CircleClipper circleClipper;
+				circleClipper.clipPoint(Point(x1, y1));
 			}break;
 			default: // no drawing yet, continue receiving clicks from user
 				isFirstPress = 0;
 				goto continueTakingInput1;
 			}
 
-			ReleaseDC(hWnd, hdc);
+			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;continueTakingInput1:;
 		}
 		else if (isSecondPress) {
-			hdc = GetDC(hWnd);
+			Algorithm::hdc = GetDC(hWnd); // handle of device context
 
 			x2 = LOWORD(lp);
 			y2 = HIWORD(lp);
 
-			switch (ch) {
+			switch (userChoice) {
 			case LINE_DDA: {
 				LineDrawer *lineDrawer = new DDALineDrawer();
-				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
+				lineDrawer->drawLine(Point(x1, y1), Point(x2, y2));
 			}break;
 			case LINE_PARAMETRIC: {
 				LineDrawer *lineDrawer = new ParametricLineDrawer();
-				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
+				lineDrawer->drawLine(Point(x1, y1), Point(x2, y2));
 			}break;
 			case LINE_BRESENHAM: {
 				LineDrawer *lineDrawer = new BresenhamLineDrawer();
-				lineDrawer->drawLine(hdc, Point(x1, y1), Point(x2, y2));
+				lineDrawer->drawLine(Point(x1, y1), Point(x2, y2));
 			}break;
 			case CIRCLE_CARTESIAN: {
 				CircleDrawer *circleDrawer = new CartesianCircleDrawer();
-				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
 			case CIRCLE_BASIC_POLAR: {
 				CircleDrawer *circleDrawer = new BasicPolarCircleDrawer();
-				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
 			case CIRCLE_IMPROVED_POLAR: {
 				CircleDrawer *circleDrawer = new ImprovedPolarCircleDrawer();
-				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
 			case CIRCLE_BRESENHAM: {
 				CircleDrawer *circleDrawer = new BresenhamCircleDrawer();
-				circleDrawer->drawCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				circleDrawer->drawCircle(Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
 			case CURVE_FIRST_DEGREE: {
 				CurveDrawer *curveDrawer = new FirstDegreeCurveDrawer();
-				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), {});
+				curveDrawer->drawCurve(Point(x1, y1), Point(x2, y2), {});
 			}break;
 			case CIRCLE_FILLING: {
 				ConvexFiller convexFiller;
-				convexFiller.fillCircle(hdc, Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				convexFiller.fillCircle(Point(x1, y1), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
 			case ELLIPSE: {
 				EllipseDrawer ellipseDrawer;
-				ellipseDrawer.drawEllipse(hdc, Point(x1, y1), 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
+				ellipseDrawer.drawEllipse(Point(x1, y1), 2 * sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)), sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2)));
 			}break;
 			case CLIP_LINE_RECTANGLE: {
-				RectangleClipper rectangleClipper(hdc);
-				rectangleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
+				RectangleClipper rectangleClipper;
+				rectangleClipper.clipLine(Point(x1, y1), Point(x2, y2));
 			}break;
 			case CLIP_LINE_CIRCLE: {
-				CircleClipper circleClipper(hdc);
-				circleClipper.clipLine(hdc, Point(x1, y1), Point(x2, y2));
+				CircleClipper circleClipper;
+				circleClipper.clipLine(Point(x1, y1), Point(x2, y2));
 			}break;
 			default: // no drawing yet, continue receiving clicks from user
 				isSecondPress = 0;
 				goto continueTakingInput2;
 			}
 
-			ReleaseDC(hWnd, hdc);
+			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;continueTakingInput2:;
 		}
 		else if (isThirdPress) {
-			hdc = GetDC(hWnd);
+			Algorithm::hdc = GetDC(hWnd); // handle of device context
 
 			s1x = LOWORD(lp);
 			s1y = HIWORD(lp);
 
-			switch (ch) {
+			switch (userChoice) {
 			case CURVE_SECOND_DEGREE: {
 				CurveDrawer *curveDrawer = new SecondDegreeCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y) };
-				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
+				curveDrawer->drawCurve(Point(x1, y1), Point(x2, y2), slopes);
 			}break;
 			default: // no drawing yet, continue receiving clicks from user
 				isThirdPress = 0;
 				goto continueTakingInput3;
 			}
 
-			ReleaseDC(hWnd, hdc);
+			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;
 			isSecondPress = 1;continueTakingInput3:;
 		}
 		else {
-			hdc = GetDC(hWnd);
-
+			Algorithm::hdc = GetDC(hWnd); // handle of device context
+			
 			s2x = LOWORD(lp);
 			s2y = HIWORD(lp);
 
-			switch (ch) {
+			switch (userChoice) {
 			case HERMITE: {
 				CurveDrawer *curveDrawer = new HermiteCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
-				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
+				curveDrawer->drawCurve(Point(x1, y1), Point(x2, y2), slopes);
 			}break;
 			case BEZIER: {
 				CurveDrawer *curveDrawer = new BezierCurveDrawer();
 				Point slopes[] = { Point(s1x, s1y), Point(s2x, s2y) };
-				curveDrawer->drawCurve(hdc, Point(x1, y1), Point(x2, y2), slopes);
+				curveDrawer->drawCurve(Point(x1, y1), Point(x2, y2), slopes);
 			}break;
 			case SPLINE: {
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				HermiteCurveDrawer hermiteCurveDrawer;
-				hermiteCurveDrawer.drawSpline(hdc, points, 4, 0.06);
+				hermiteCurveDrawer.drawSpline(points, 4, 0.06);
 			}break;
 			case CONVEX_FILLING: {
 				Point points[] = { Point(x1, y1), Point(s1x, s1y), Point(x2, y2), Point(s2x, s2y) };
 				ConvexFiller convexFiller;
-				convexFiller.convexFill(hdc, points, 4);
+				convexFiller.convexFill(points, 4);
 			}
 			}
 
-			ReleaseDC(hWnd, hdc);
+			ReleaseDC(hWnd, Algorithm::hdc);
 			isFirstPress = 1;
 			isSecondPress = 1;
 			isThirdPress = 1;

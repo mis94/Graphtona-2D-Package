@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Line\DDALineDrawer.h"
 
-void DDALineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
+void DDALineDrawer::drawLine(Point startPoint, Point endPoint)
 {
 	double dx = endPoint.x - startPoint.x;
 	double dy = endPoint.y - startPoint.y;

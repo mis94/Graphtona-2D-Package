@@ -6,4 +6,5 @@ class Algorithm
 {
 public:
 	static const double PI;
+	static HDC hdc; // handle of device context
 };

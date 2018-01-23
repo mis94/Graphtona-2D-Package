@@ -1,6 +1,6 @@
 #include "..\..\Header Files\Line\BresenhamLineDrawer.h"
 
-void BresenhamLineDrawer::drawLine(HDC hdc, Point startPoint, Point endPoint)
+void BresenhamLineDrawer::drawLine(Point startPoint, Point endPoint)
 {
 	int ixs = (int)startPoint.x; // converting all double variables to ints, as this algorithm works all integers
 	int iys = (int)startPoint.y;
